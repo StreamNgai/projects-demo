@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.Rect;
@@ -16,7 +17,6 @@ import java.util.Random;
 
 /**
  * Created by Ngai on 2016/7/8.
- * 淡白纹理，根据赛贝尔曲线变化轨迹。<br />
  */
 public class WallpaperRender {
 
@@ -26,58 +26,44 @@ public class WallpaperRender {
     private int mHeight = 0;
 
     private Bitmap mBasicBg; // 基础颜色
-    private Bitmap mTexture_0; // 纹理变换
-    private Bitmap mTexture_1; // 纹理变换
-    private Bitmap mTexture_2; // 纹理变换
+    private Rect mBasicBgRect;
+    private Bitmap mTexture; // 纹理变换
+    private Rect mTextureRect;
 
-    private Rect mTexturebgRect;
-    private Rect mTextureRect_0;
-    private Rect mTextureRect_1;
-
-    private float mDegrees = 0f; //
-    private float mRate = 0.1f; // 速率
+    private float mDegrees = -0.1f; //
+    private float mRate = 0.1f; // 速率 0.1
     boolean degreesRotary = true;
 
+    private Paint mPaint;
+    private float alpha = 0; // 0 ~ 127
+
     private RectF mRenderAreaRectF;
-    private RectF mRenderAreaRectFChange;
 
     private int mCenterX;
     private int mCenterY;
 
-    private Paint mPaint;
-    private Random random = null;
-    private int alpha = 255;
-    boolean alphaRotary = true;
-
     public WallpaperRender(Context context) {
 
         int background = R.drawable.wallpage_bg;
-        int texture_0 = R.drawable.wallpage_texture_0;
-        int texture_1 = R.drawable.wallpage_texture_1;
-        int texture_2 = R.drawable.wallpage_texture_2;
+        int texture_0 = R.drawable.wallpage_texture;
         BitmapFactory.Options bfo = new BitmapFactory.Options();
-        bfo.inSampleSize = 6;
+        bfo.inSampleSize = 2;
         mBasicBg = BitmapFactory.decodeResource(context.getResources(), background, bfo);
-        mTexturebgRect = new Rect(0, 0, mBasicBg.getWidth(), mBasicBg.getHeight());
+        mBasicBgRect = new Rect(0, 0, mBasicBg.getWidth(), mBasicBg.getHeight());
 
         bfo.inSampleSize = 2;
-        mTexture_0 = BitmapFactory.decodeResource(context.getResources(), texture_0, bfo);
-        mTextureRect_0 = new Rect(0, 0, mTexture_0.getWidth(), mTexture_0.getHeight());
-
-        mTexture_1 = BitmapFactory.decodeResource(context.getResources(), texture_1, bfo);
-        mTextureRect_1 = new Rect(0, 0, mTexture_1.getWidth(), mTexture_1.getHeight());
-
-        mTexture_2 = BitmapFactory.decodeResource(context.getResources(), texture_2, bfo);
+        mTexture = BitmapFactory.decodeResource(context.getResources(), texture_0, bfo);
+        mTextureRect = new Rect(0, 0, mTexture.getWidth(), mTexture.getHeight());
 
         mPaint = new Paint();
         mPaint.setStyle(Paint.Style.STROKE);   //空心
 
     }
 
-    // 1 ~ 100
+    // 1 ~ 127 // 最大透明 50 %
     private Paint setAlpha(int alpha) {
-        if (alpha > 255)
-            alpha = 255;
+        if (alpha > 60)
+            alpha = 60;
         if (alpha < 0)
             alpha = 0;
         mPaint.setAlpha(alpha);
@@ -85,141 +71,120 @@ public class WallpaperRender {
     }
 
     public void setRenderArea(int width, int height) {
-
         this.mWidth = width;
         this.mHeight = height;
-
-        mRenderAreaRectF = new RectF(0, 0, width, height);
-        mRenderAreaRectFChange = new RectF(0, 0, width, height);
 
         mCenterX = width / 2;
         mCenterY = height / 2;
 
-        random = new Random();
+        tDx = -mWidth / 2 + 150;
+
+        mRenderAreaRectF = new RectF(0, 0, width, height);
     }
 
     public void onDraw(Canvas canvas) {
         canvas.save();
 
         // 背景
-        canvas.drawBitmap(mBasicBg, mTexturebgRect, mRenderAreaRectF, null);
+        canvas.drawBitmap(mBasicBg, mBasicBgRect, mRenderAreaRectF, null);
+//        canvas.drawColor(Color.parseColor("#032F50")); // 这方式有效减少内存消耗
 
-//        if (alphaRotary) {
-//            alpha += 5;
-//            if (alpha >= 255)
-//                alphaRotary = false;
-//        } else {
-//            alpha -= 5;
-//            if (alpha <= 2)
-//                alphaRotary = true;
-//        }
+//        doTurnBackCycle(); 
+        // 一直循环
+        doCycle();
+        doAnimation(canvas, mDegrees, alpha);
+//        Log.d(TAG, "degrees = " + mDegrees + " , alpha = " + alpha);
+        canvas.restore();
+    }
 
+    private float mDegress3  = -0.07f;
 
+    private void doCycle() {
+        if(mDegrees >= 360)
+            mDegrees = -0.09f;
+
+        mDegrees += mRate;
+
+        if(mDegress3 >= 130){
+            mDegress3 = -0.07f;
+        }
+
+        mDegress3 += 0.07f;
+
+        if(alpha <=60 && degreesRotary){
+            if(mDegrees < 86){
+                alpha = (float) (mDegrees * 0.7); // mDegrees = 86 时，alpha = 60
+            } else {
+                alpha += 0.2;
+            }
+
+        } else {
+            if(tDy <= (mHeight / 3) * 2 && tDy > 0){
+                alpha -= 0.2;
+                degreesRotary = false;
+            }else {
+                degreesRotary = true;
+            }
+        }
+
+    }
+
+    private void doTurnBackCycle() {
+        // 来回循环
         if (degreesRotary) {
-            mDegrees = mDegrees + mRate;
+            mDegrees += mRate;
             alpha -= 1;
-            if (mDegrees >= 20)
+            if (mDegrees >= 180)
                 degreesRotary = false;
         } else {
-            mDegrees = mDegrees - mRate;
+            mDegrees -= mRate;
             alpha += 1;
             if (mDegrees <= 0)
                 degreesRotary = true;
         }
-
-//        doAnimation(canvas,++mDegrees,alpha);
-//        doAnimation2(canvas, mDegrees, alpha);
-        doAnimation3(canvas, mDegrees, alpha);
-        Log.d(TAG, "" + mDegrees);
-        canvas.restore();
     }
 
-    private void doAnimation3(Canvas canvas, float degrees, int alpha) {
-        int tAlpha = alpha;
-        float degr = 0;
-        mRenderAreaRectFChange.set(-(degrees * 20), -(degrees * 20), mWidth + (degrees * 20), mHeight + (degrees * 20));//  放大
+    private float tDy = 0.1f; // 纹路2，当< 0时，开始旋转
+    private float tDx;
+    private float mAlpha3 = 60;
+
+    private void doAnimation(Canvas canvas, float degrees, float alpha) {
 
         canvas.restore();
         canvas.save();
-        degr = degrees - 20;
-        canvas.rotate(degr, mCenterX, mCenterY);//  旋转
-        canvas.drawBitmap(mTexture_0, mTextureRect_0, mRenderAreaRectFChange, setAlpha(90 - (int) (mDegrees * 4)));
+        canvas.rotate(degrees, mCenterX, mCenterY);//  旋转
+        canvas.drawBitmap(mTexture, mTextureRect, mRenderAreaRectF, setAlpha(Math.round(alpha)));
 
-//        canvas.restore();
-//        canvas.save();
-//        canvas.translate(-10, -160);
-//        canvas.drawBitmap(mTexture_1, mTextureRect_1, new RectF(0,0,mWidth / 2 + 30,mHeight/2+ 30), setAlpha(255 - alpha));
-
-
+//         2
+        if(mDegrees <= 360){
+            canvas.restore();
+            canvas.save();
+            if (tDy <= -mHeight) {
+                tDy = 2*mHeight;
+            } else {
+                tDy = 2*mHeight - ((2*mHeight / 180) * mDegrees) - 23;
+            }
+            canvas.translate(tDx , tDy);
+            canvas.drawBitmap(mTexture, mTextureRect, mRenderAreaRectF, setAlpha(60));
+        }
+//        // 3
         canvas.restore();
         canvas.save();
-        degr = degrees - 30;
-        canvas.rotate(degr, mCenterX, mCenterY);
-        tAlpha = (255 - alpha);
-        canvas.drawBitmap(mTexture_2, mTextureRect_1, mRenderAreaRectFChange, setAlpha((int) (mDegrees * 4)));//透明度最大为90
+        canvas.translate(mWidth / 2 - 100, -mHeight);
+        canvas.rotate(mDegress3);
 
+        if(mDegress3 < 80 && mDegress3 >30){
+            mAlpha3 -= 0.3;
+            if(mAlpha3 <=0)
+                mAlpha3 = 0;
+        }else if(mDegrees > 80){
+            mAlpha3 += 0.4;
+            if(mAlpha3 >=60)
+                mAlpha3 = 60;
+        }
+        canvas.drawBitmap(mTexture, mTextureRect, mRenderAreaRectF, setAlpha((int) mAlpha3));
 
     }
 
-    private void doAnimation2(Canvas canvas, float degrees, int alpha) {
-
-        //  放大
-        mRenderAreaRectFChange.set(-(degrees * 20), -(degrees * 20), mWidth + (degrees * 20), mHeight + (degrees * 20));
-        //  旋转
-        canvas.rotate(degrees, mCenterX, mCenterY);
-        canvas.drawBitmap(mTexture_0, mTextureRect_0, mRenderAreaRectFChange, setAlpha(127));
-
-//        canvas.rotate(degrees, mCenterX, mCenterY);
-//        canvas.drawBitmap(mTexture_1, mTextureRect_1, mRenderAreaRectF, setAlpha(127));
-//        canvas.drawBitmap(mTexture_1, mTextureRect_1, mRenderAreaRectF, setAlpha(127));
-
-        canvas.restore();
-        canvas.save();
-        canvas.translate(-mCenterX + 60, -mCenterY + 60);
-        canvas.rotate(10);
-        canvas.drawBitmap(mTexture_1, mTextureRect_1, mRenderAreaRectF, setAlpha(255 - alpha));
-
-    }
-
-    private void doAnimation(Canvas canvas, float degrees, int alpha) {
-
-        canvas.rotate(degrees, mCenterX / 2, mCenterY);
-        canvas.drawBitmap(mTexture_0, mTextureRect_0, mRenderAreaRectF, setAlpha(alpha));
-
-        canvas.rotate(degrees, mCenterX / 2 - 10, mCenterY / 2 - 10);
-        canvas.drawBitmap(mTexture_1, mTextureRect_1, mRenderAreaRectF, setAlpha(alpha));
-        canvas.rotate(degrees, mCenterX / 2, mCenterY / 2);
-        canvas.drawBitmap(mTexture_1, mTextureRect_1, mRenderAreaRectF, setAlpha(alpha));
-
-        canvas.restore();
-        canvas.save();
-        canvas.translate(mCenterX / 2, mCenterY / 2);
-        canvas.rotate(30, mCenterX, mCenterY);
-        canvas.drawBitmap(mTexture_1, mTextureRect_1, mRenderAreaRectF, setAlpha(alpha));
-
-        canvas.restore();
-        canvas.save();
-        canvas.translate(-mCenterX - 30, -mCenterY - 30);
-        canvas.rotate(30, mCenterX, mCenterY);
-        canvas.drawBitmap(mTexture_1, mTextureRect_1, mRenderAreaRectF, setAlpha(255 - alpha));
-
-        canvas.restore();
-        canvas.save();
-        canvas.translate(0, mCenterY / 2);
-        canvas.rotate(30, mCenterX, mCenterY);
-        canvas.drawBitmap(mTexture_1, mTextureRect_1, mRenderAreaRectF, setAlpha(alpha));
-    }
-
-    private int randomX() {
-        int max = (mCenterX / 4) * 3;
-        int min = -mCenterX;
-        return random.nextInt(max) % (max - min + 1) + min;
-    }
-
-    private int randomY() {
-        int max = (mCenterY / 4) * 3;
-        int min = -mCenterY;
-        return random.nextInt(max) % (max - min + 1) + min;
-    }
 
 }
