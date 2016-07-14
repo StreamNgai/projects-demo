@@ -1,44 +1,61 @@
 package org.ngai.wallpaperservice;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Rect;
-import android.graphics.RectF;
 import android.os.Handler;
 import android.service.wallpaper.WallpaperService;
 import android.util.Log;
 import android.view.SurfaceHolder;
 
-import org.ngai.glwallpaperservice.R;
-
 
 /**
  * Created by Ngai on 2016/7/6.
  */
-public class TextureWallpaper extends WallpaperService {
+public class SimpleTextureWallpaper extends WallpaperService {
 
     private static final String TAG = "TextureWallpaper";
     private int mWidth, mHeight, maxWidth;
     public static final int SCENE_WIDTH = 150;
 
-    WallpaperRender wallpaperRender;
+    private WallpaperRender wallpaperRender;
 
     @Override
     public Engine onCreateEngine() {
         return new TextureEngine();
     }
 
-    class TextureEngine extends Engine{
+    class TextureEngine extends Engine {
 
-        private final Object mSurfaceLock = new Object();
-        private DrawThread mThread;
+        private final Handler mHandler = new Handler();
         private boolean mVisible;
+        private final Runnable drawer = new Runnable() {
+            public void run() {
+                drawFrame();
+            }
+        };
+
+
+       private void drawFrame() {
+
+           final SurfaceHolder holder = getSurfaceHolder();
+           Canvas c = null;
+           try {
+               c = holder.lockCanvas();
+               if (c != null) {
+                   wallpaperRender.onDraw(c);
+               }
+           } finally {
+               if (c != null) {
+                   holder.unlockCanvasAndPost(c);
+               }
+           }
+
+           postDraw();
+       }
 
         private void postDraw() {
-            if (mVisible  && mThread == null) {
-                mThread = new DrawThread(getSurfaceHolder());
-                mThread.start();
+           mHandler.removeCallbacks(drawer);
+            if (mVisible) {
+               mHandler.postDelayed(drawer, 1 * 35);
             }
         }
 
@@ -46,8 +63,7 @@ public class TextureWallpaper extends WallpaperService {
         @Override
         public void onDestroy() {
             super.onDestroy();
-//           mThread.interrupt();
-//           mThread = null;
+           mHandler.removeCallbacks(drawer);
         }
 
         @Override
@@ -55,7 +71,10 @@ public class TextureWallpaper extends WallpaperService {
             mVisible = visible;
             if (visible) {
                 postDraw();
+            } else {
+               mHandler.removeCallbacks(drawer);
             }
+            Log.d(TAG, "onVisibilityChanged " + visible);
         }
 
         @Override
@@ -65,10 +84,12 @@ public class TextureWallpaper extends WallpaperService {
             mWidth = width;
             mHeight = height;
 
-            if(wallpaperRender == null){
+            if (wallpaperRender == null) {
                 wallpaperRender = new WallpaperRender(getApplicationContext());
                 wallpaperRender.setRenderArea(mWidth, mHeight);
             }
+
+            Log.d(TAG, "onSurfaceChanged  mWidth=" + mWidth + " ,  mHeight = " + mHeight);
             postDraw();
         }
 
@@ -76,11 +97,7 @@ public class TextureWallpaper extends WallpaperService {
         public void onSurfaceDestroyed(SurfaceHolder holder) {
             super.onSurfaceDestroyed(holder);
             mVisible = false;
-            if(mThread != null){
-                mThread.interrupt();
-                mThread = null;
-            }
-
+           mHandler.removeCallbacks(drawer);
         }
 
         @Override
@@ -98,35 +115,6 @@ public class TextureWallpaper extends WallpaperService {
             super.onCreate(surfaceHolder);
             setTouchEventsEnabled(false); // 暂时不考虑触屏事件
         }
-
-        ///*************
-        private class DrawThread extends Thread {
-            private static final long SLEEP_TIME = 1 * 32;
-            private SurfaceHolder mHolder;
-
-            public DrawThread(SurfaceHolder holder) {
-                mHolder = holder;
-            }
-
-            @Override
-            public void run() {
-                while(true) {
-                    synchronized (mSurfaceLock) {
-                        Log.d(TAG,""+mVisible);
-                        Canvas canvas = mHolder.lockCanvas();
-                        if (canvas != null) {
-                            wallpaperRender.onDraw(canvas);
-                            mHolder.unlockCanvasAndPost(canvas);
-                        }
-                    }
-                    try {
-                        Thread.sleep(SLEEP_TIME);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        }
-
     }
+
 }

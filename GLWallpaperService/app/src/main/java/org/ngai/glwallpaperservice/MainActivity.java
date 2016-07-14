@@ -37,12 +37,12 @@ public class MainActivity extends AppCompatActivity {
             Bitmap mBgBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.wallpage_bg);
             Rect mBgBitmapRect = new Rect(0, 0, mBgBitmap.getWidth(), mBgBitmap.getHeight());
 
-            Bitmap mTextureBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.wallpage_texture_0);
-            Rect mTextureBitmapRect = new Rect(0, 0, mTextureBitmap.getWidth(), mTextureBitmap.getHeight());
+//            Bitmap mTextureBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.wallpage_texture_0);
+//            Rect mTextureBitmapRect = new Rect(0, 0, mTextureBitmap.getWidth(), mTextureBitmap.getHeight());
 
-            RectF mBgRectF = new RectF(0, 0, getWidth(), getRight());
-            canvas.drawBitmap(mBgBitmap, mBgBitmapRect, mBgRectF, null);
-            canvas.drawBitmap(mTextureBitmap, mTextureBitmapRect, mBgRectF, null);
+//            RectF mBgRectF = new RectF(0, 0, getWidth(), getRight());
+//            canvas.drawBitmap(mBgBitmap, mBgBitmapRect, mBgRectF, null);
+//            canvas.drawBitmap(mTextureBitmap, mTextureBitmapRect, mBgRectF, null);
 
         }
 

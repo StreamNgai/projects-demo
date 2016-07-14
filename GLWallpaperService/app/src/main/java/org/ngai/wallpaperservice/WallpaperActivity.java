@@ -70,22 +70,18 @@ public class WallpaperActivity extends AppCompatActivity {
         wallpaperRender = new WallpaperRender(this);
         wallpaperRender.setRenderArea(windowWidth, windowHeight);
 
-//        SimpleView simpleView = new SimpleView(this);
-//        ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-//        simpleView.setLayoutParams(layoutParams);
-//        layout.addView(simpleView);
-
-        PathView simpleView = new PathView(this);
+        SimpleView simpleView = new SimpleView(this);
         ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         simpleView.setLayoutParams(layoutParams);
         layout.addView(simpleView);
 
+//        PathView simpleView = new PathView(this);
+//        ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+//        simpleView.setLayoutParams(layoutParams);
+//        layout.addView(simpleView);
+
     }
 
-//    private Paint createPaintAlpha(int alpha){
-//        vPaint .setAlpha( alpha );
-//        return vPaint;
-//    }
 
     class SimpleView extends View {
 
@@ -125,24 +121,26 @@ public class WallpaperActivity extends AppCompatActivity {
         private Path mPath;
 
         private float x = -2;
+
         // 用线程去驱动 Canvas 来减少对 UI 线程的负担
         private void doDraw(Canvas canvas) {
 
             canvas.drawColor(Color.parseColor("#F1F1F1"));
 
-            canvas.drawPath(mPath,mPaint);
+            canvas.drawPath(mPath, mPaint);
 
         }
 
         private float culY(float x) {
-            return (float) (0.5 * (Math.pow(4,2.5) / (4+Math.pow(x,2)))* Math.sin((0.75*x-0.5)*Math.PI));
+            return (float) Math.sin(x);
         }
 
 
         private class DrawThread extends Thread {
-            private static final long SLEEP_TIME = 1 * 1000;
+            private static final long SLEEP_TIME = 1 * 35;
             private SurfaceHolder mHolder;
             private boolean mIsRun = false;
+            private float a = 0;
 
             public DrawThread(SurfaceHolder holder) {
                 mHolder = holder;
@@ -150,58 +148,68 @@ public class WallpaperActivity extends AppCompatActivity {
 
             @Override
             public void run() {
-                while(true) {
+                while (true) {
                     synchronized (mSurfaceLock) {
                         if (!mIsRun) {
                             return;
                         }
                         Canvas canvas = mHolder.lockCanvas();
                         if (canvas != null) {
-
-                            if(mPaint == null){
-                                mPaint = new Paint();
-                                mPaint.setStyle(Paint.Style.STROKE);
-                                mPaint.setColor(Color.BLUE);
-                                mPath = new Path();
-                                mPath.moveTo(0,300);
-                                while (x < 2){
-                                    x += 0.1;
-                                    float y = culY(x);
-                                    mPath.lineTo(x * 100+100,y* 100+300);
-                                    Log.d("DrawThread","x = "+x+", y = "+y);
-                                }
-
+                            mPath.rewind();
+                            mPath.moveTo(0, 300);
+                            while (x < 12) {
+                                x += 0.01;
+                                float y = culY(x + a);
+                                mPath.lineTo(x * 100, y * 100 + 300);
                             }
 
-                            doDraw(canvas);  //这里做真正绘制的事情
+                            canvas.drawColor(Color.parseColor("#F1F1F1"));
+                            canvas.drawPath(mPath, mPaint);
+
+
+//                            doDraw(canvas);  //这里做真正绘制的事情
                             mHolder.unlockCanvasAndPost(canvas);
                         }
                     }
                     try {
+                        a += 0.5f;
+                        x = 0;
+                        if(a >12)
+                            a = -12;
                         Thread.sleep(SLEEP_TIME);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
                 }
             }
+
             public void setRun(boolean isRun) {
                 this.mIsRun = isRun;
             }
         }
 
         public PathView(Context context) {
-            this(context,null);
+            this(context, null);
         }
+
         public PathView(Context context, AttributeSet attrs) {
-            this(context, attrs,0);
+            this(context, attrs, 0);
 
         }
 
         public PathView(Context context, AttributeSet attrs, int defStyleAttr) {
             super(context, attrs, defStyleAttr);
+
+            mPaint = new Paint();
+            mPaint.setStyle(Paint.Style.STROKE);
+            mPaint.setColor(Color.BLUE);
+            mPaint.setAntiAlias(true);
+            mPath = new Path();
+
             mThread = new DrawThread(getHolder());
             mThread.setRun(true);
             mThread.start();
+
         }
 
     }

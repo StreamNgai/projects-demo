@@ -5,10 +5,12 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.LinearGradient;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.graphics.Shader;
 import android.util.Log;
 
 import org.ngai.glwallpaperservice.R;
@@ -35,9 +37,11 @@ public class WallpaperRender {
     boolean degreesRotary = true;
 
     private Paint mPaint;
+//    private Paint mGradientPaint;
     private float alpha = 0; // 0 ~ 127
 
     private RectF mRenderAreaRectF;
+    private RectF mRenderAreaRectFChange2;
 
     private int mCenterX;
     private int mCenterY;
@@ -47,7 +51,7 @@ public class WallpaperRender {
         int background = R.drawable.wallpage_bg;
         int texture_0 = R.drawable.wallpage_texture;
         BitmapFactory.Options bfo = new BitmapFactory.Options();
-        bfo.inSampleSize = 2;
+        bfo.inSampleSize = 3;
         mBasicBg = BitmapFactory.decodeResource(context.getResources(), background, bfo);
         mBasicBgRect = new Rect(0, 0, mBasicBg.getWidth(), mBasicBg.getHeight());
 
@@ -79,7 +83,18 @@ public class WallpaperRender {
 
         tDx = -mWidth / 2 + 150;
 
-        mRenderAreaRectF = new RectF(0, 0, width, height);
+        mRenderAreaRectF = new RectF(0, 0, width + 100, height+ 100);
+        mRenderAreaRectFChange2  = new RectF(0, 0, width + (width / 2)+100, height);
+
+//        mGradientPaint = new Paint();
+
+        // 虽然降低了内存消耗，但分出现分层
+//        LinearGradient gradient = new LinearGradient(mWidth, 0, mWidth, mHeight, Color.parseColor("#012e50"), Color.parseColor("#07182a"),
+//                Shader.TileMode.REPEAT);
+//        mGradientPaint.setShader(gradient);
+//        mGradientPaint.setAntiAlias(true);
+//        mGradientPaint.setStyle(Paint.Style.FILL);
+
     }
 
     public void onDraw(Canvas canvas) {
@@ -87,61 +102,46 @@ public class WallpaperRender {
 
         // 背景
         canvas.drawBitmap(mBasicBg, mBasicBgRect, mRenderAreaRectF, null);
-//        canvas.drawColor(Color.parseColor("#032F50")); // 这方式有效减少内存消耗
+//        canvas.drawRect(0, 0, mWidth, mHeight, mGradientPaint);// 这方式有效减少内存消耗
 
-//        doTurnBackCycle(); 
         // 一直循环
         doCycle();
         doAnimation(canvas, mDegrees, alpha);
-//        Log.d(TAG, "degrees = " + mDegrees + " , alpha = " + alpha);
+        Log.d(TAG, "degrees = " + mDegrees + " , alpha = " + alpha);
         canvas.restore();
     }
 
-    private float mDegress3  = -0.07f;
+    private float mDegress3 = -0.07f;
+    private float mDegress2 = -0.07f;
 
     private void doCycle() {
-        if(mDegrees >= 360)
+        if (mDegrees >= 360)
             mDegrees = -0.09f;
 
         mDegrees += mRate;
 
-        if(mDegress3 >= 130){
+        if (mDegress3 >= 130) {
             mDegress3 = -0.07f;
         }
 
         mDegress3 += 0.07f;
 
-        if(alpha <=60 && degreesRotary){
-            if(mDegrees < 86){
-                alpha = (float) (mDegrees * 0.7); // mDegrees = 86 时，alpha = 60
+        if (alpha <= 60 && degreesRotary) {
+            if (mDegrees < 86) {
+                alpha = (float) (mDegrees * 6); // mDegrees = 86 时，alpha = 60
             } else {
                 alpha += 0.2;
             }
 
         } else {
-            if(tDy <= (mHeight / 3) * 2 && tDy > 0){
+            if (mDegrees > 130 && mDegrees <= 209) { // 纹理1 消失
                 alpha -= 0.2;
                 degreesRotary = false;
-            }else {
+            } else {
                 degreesRotary = true;
             }
         }
 
-    }
-
-    private void doTurnBackCycle() {
-        // 来回循环
-        if (degreesRotary) {
-            mDegrees += mRate;
-            alpha -= 1;
-            if (mDegrees >= 180)
-                degreesRotary = false;
-        } else {
-            mDegrees -= mRate;
-            alpha += 1;
-            if (mDegrees <= 0)
-                degreesRotary = true;
-        }
     }
 
     private float tDy = 0.1f; // 纹路2，当< 0时，开始旋转
@@ -155,31 +155,32 @@ public class WallpaperRender {
         canvas.rotate(degrees, mCenterX, mCenterY);//  旋转
         canvas.drawBitmap(mTexture, mTextureRect, mRenderAreaRectF, setAlpha(Math.round(alpha)));
 
-//         2
-        if(mDegrees <= 360){
+//      2
+        if (mDegrees > 130) {
             canvas.restore();
             canvas.save();
-            if (tDy <= -mHeight) {
-                tDy = 2*mHeight;
-            } else {
-                tDy = 2*mHeight - ((2*mHeight / 180) * mDegrees) - 23;
-            }
-            canvas.translate(tDx , tDy);
-            canvas.drawBitmap(mTexture, mTextureRect, mRenderAreaRectF, setAlpha(60));
+            tDy =  mHeight - (( mHeight / 300) * mDegrees) - 65;
+            mDegress2 += 0.05f;
+            canvas.rotate(-mDegress2,tDx / 2, tDy / 2);
+            canvas.translate(tDx, tDy);
+            canvas.drawBitmap(mTexture, mTextureRect, mRenderAreaRectFChange2, setAlpha(60));
+        }else {
+            mDegress2 = 0;
         }
-//        // 3
+
+//      3
         canvas.restore();
         canvas.save();
         canvas.translate(mWidth / 2 - 100, -mHeight);
         canvas.rotate(mDegress3);
 
-        if(mDegress3 < 80 && mDegress3 >30){
+        if (mDegress3 < 80 && mDegress3 > 30) {
             mAlpha3 -= 0.3;
-            if(mAlpha3 <=0)
+            if (mAlpha3 <= 0)
                 mAlpha3 = 0;
-        }else if(mDegrees > 80){
+        } else if (mDegrees > 80) {
             mAlpha3 += 0.4;
-            if(mAlpha3 >=60)
+            if (mAlpha3 >= 60)
                 mAlpha3 = 60;
         }
         canvas.drawBitmap(mTexture, mTextureRect, mRenderAreaRectF, setAlpha((int) mAlpha3));
