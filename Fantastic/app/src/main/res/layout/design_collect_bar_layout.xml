@@ -1,0 +1,22 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:id="@+id/collect_bar_layout"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:layout_gravity="center_vertical"
+              android:gravity="center_horizontal|center_vertical"
+              android:orientation="horizontal"
+              app:tabBackground="@color/colorDefaultText">
+
+
+    <com.kekstudio.dachshundtablayout.DachshundTabLayout
+        android:id="@+id/collect_tab_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        app:tabBackground="@color/colorPrimary"
+        app:tabMode="scrollable"
+        app:tabSelectedTextColor="@android:color/white"
+        app:tabTextAppearance="@style/Toolbar.TabText"
+        app:tabTextColor="@color/colorBackground"/>
+
+</LinearLayout>

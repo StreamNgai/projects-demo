@@ -1,0 +1,50 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:background="@drawable/group_bg"
+                tools:context="dev.weihl.amazing.business.main.GroupFragment">
+
+
+    <Button
+        android:id="@+id/close"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:layout_margin="6dp"
+        android:background="@drawable/ic_close_gray"/>
+
+    <TextView
+        android:id="@+id/text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/close"
+        android:layout_alignStart="@+id/close"
+        android:layout_below="@+id/close"
+        android:layout_marginLeft="10dp"
+        android:gravity="bottom"
+        android:includeFontPadding="false"
+        android:text="专辑推荐"
+        android:textColor="@color/colorDefaultText"
+        android:textSize="17sp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/text"
+        android:layout_marginLeft="8dp"
+        android:layout_toEndOf="@+id/text"
+        android:layout_toRightOf="@+id/text"
+        android:paddingBottom="1dp"
+        android:text="点击进入推荐"
+        android:textColor="@color/colorDefaultText"
+        android:textSize="12sp"/>
+
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="wrap_content"
+        android:layout_height="160dp"
+        android:layout_below="@+id/text"/>
+
+</RelativeLayout>

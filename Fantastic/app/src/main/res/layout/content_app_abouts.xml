@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="dev.ngai.fantastic.business.appabout.AppAboutsActivity"
+    tools:showIn="@layout/activity_app_abouts">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="vertical"
+            android:layout_marginBottom="16dp"
+            android:layout_marginTop="16dp"
+            android:background="#FFFFFF"
+            android:padding="16dp"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:layout_width="90dp"
+                android:layout_height="90dp"
+                android:visibility="gone"
+                android:layout_gravity="center_horizontal"
+                android:src="@mipmap/ic_launcher"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="唯色影 - 源与生活.发现生活 !"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="16dp"
+                android:textSize="20sp"
+                android:textColor="@color/colorDefaultText"/>
+
+            <TextView
+                android:id="@+id/versionText"
+                android:text="Version 4.6.0(460)"
+                android:layout_width="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:textSize="16sp"
+                android:textColor="@color/colorDefaultText" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginLeft="32dp"
+                android:layout_marginRight="32dp"
+                android:background="@color/colorDefaultText"/>
+
+            <TextView
+                android:text="@string/app_introduction"
+                android:layout_width="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="16dp"
+                android:layout_marginLeft="8dp"
+                android:lineSpacingExtra="9dp"
+                android:layout_marginRight="8dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_gravity="center_horizontal"
+                android:textSize="16sp"
+                android:textColor="@color/colorDefaultText" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_marginBottom="16dp"
+            android:background="#FFFFFF"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="36dp">
+            <TextView
+                android:text="作者：\nFantastic 工作室(客服QQ：3396587133)"
+                android:lineSpacingExtra="9dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:textColor="@color/colorDefaultText"/>
+
+            <TextView
+                android:layout_marginTop="16dp"
+                android:text="版权：\n本软件所有资源均来源于网络和网友上传，图片版权均属于原作者，如若侵犯了您的权益请立即与我们联系，我们将及时撤除。"
+                android:lineSpacingExtra="9dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:textColor="@color/colorDefaultText"/>
+
+            <TextView
+                android:layout_marginTop="16dp"
+                android:text="赞助：\nFantastic工作室建立不久，还有很多需要完善的地方，如果您觉得此项目你能有所感慨且想支持项目更好的发展，可扫码支付任意金额(一杯咖啡)。"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:visibility="gone"
+                android:lineSpacingExtra="9dp"
+                android:textColor="@color/colorDefaultText"/>
+
+            <TextView
+                android:layout_marginTop="16dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="支付宝："
+                android:visibility="gone"
+                android:textSize="16sp"
+                android:textColor="@color/colorDefaultText" />
+
+            <ImageView
+                android:layout_marginTop="8dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:visibility="gone"
+                android:src="@drawable/ic_add"/>
+
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginTop="16dp"
+                android:visibility="gone"
+                android:layout_marginLeft="32dp"
+                android:layout_marginRight="32dp"
+                android:background="@color/colorDefaultText"/>
+
+
+            <TextView
+                android:layout_marginTop="16dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="微信支付："
+                android:textSize="16sp"
+                android:visibility="gone"
+                android:textColor="@color/colorDefaultText" />
+
+            <ImageView
+                android:layout_marginTop="8dp"
+                android:layout_width="wrap_content"
+                android:visibility="gone"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:src="@drawable/ic_add"/>
+
+            <TextView
+                android:text="@string/copy_right"
+                android:lineSpacingExtra="9dp"
+                android:layout_marginTop="32dp"
+                android:gravity="right"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:textColor="@color/colorDefaultText"/>
+
+        </LinearLayout>
+    </LinearLayout>
+
+</android.support.v4.widget.NestedScrollView>

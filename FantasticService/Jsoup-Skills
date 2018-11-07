@@ -1,0 +1,17 @@
+
+1、登录操作
+//用Connection接口的execute方法
+//得到org.jsoup.Connection.Response对象
+Response resp = Jsoup.connect("login url")
+        .data("username", "subi")
+        .data("password", "123456")
+        .method(Method.POST)
+        .execute();
+
+//通过Response对象的body()方法得到页面用于解析，判断是否登录成功
+String loginResult = resp.body();
+
+//获得cookies
+Map<String, String> cookies = resp.cookies();
+//用获取到的cookie访问页面
+Jsoup.connect("url").cookies(cookies).get();

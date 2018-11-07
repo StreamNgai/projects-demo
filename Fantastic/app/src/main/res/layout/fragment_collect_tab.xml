@@ -1,0 +1,82 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:overScrollMode="never"
+        android:visibility="gone" />
+
+    <!-- empty tip-->
+    <LinearLayout
+        android:id="@+id/collectEmptyLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="120dp"
+        android:orientation="vertical"
+        android:visibility="visible">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:alpha="0.2"
+            android:src="@drawable/ic_local_florist_black" />
+
+        <TextView
+            android:id="@+id/titleView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:alpha="0.5"
+            android:gravity="center"
+            android:textColor="@color/colorDefaultText"
+            android:textSize="20sp"
+            tools:text="收藏列表" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/deleteActionLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="16dp"
+        android:visibility="gone">
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/cancel_action"
+            android:layout_width="70dp"
+            android:layout_height="40dp"
+            android:background="@drawable/btn_login_sel"
+            android:text="取消"
+            android:textColor="#FFFFFF" />
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/delete_action"
+            android:layout_width="70dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:background="@drawable/btn_login_sel"
+            android:text="删除"
+            android:textColor="#FFFFFF" />
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/download_action"
+            android:layout_width="70dp"
+            android:layout_height="40dp"
+            android:layout_marginRight="16dp"
+            android:background="@drawable/btn_login_sel"
+            android:text="下载"
+            android:textColor="#FFFFFF"
+            android:visibility="gone" />
+
+    </LinearLayout>
+
+
+</RelativeLayout>
