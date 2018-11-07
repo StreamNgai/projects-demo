@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "E:\\360MoveData\\Users\\Administrator\\Documents\\GitHub\\android-Camera2Video-master\\Application\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-el\\values-el.xml",
+            "outputFile": "E:\\360MoveData\\Users\\Administrator\\Documents\\GitHub\\projects-demo\\android-Camera2Video-master\\Application\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-el\\values-el.xml",
             "map": [
                 {
                     "source": "C:\\Users\\Administrator\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-27.0.2.aar\\ae9ac856c43ac366dabbfaf4aa21627e\\res\\values-el\\values-el.xml",

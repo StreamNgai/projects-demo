@@ -1,4 +1,4 @@
-#Tue Nov 06 17:22:49 CST 2018
-base.0=E\:\\360MoveData\\Users\\Administrator\\Documents\\GitHub\\android-Camera2Video-master\\Application\\build\\intermediates\\transforms\\dexMerger\\debug\\0
+#Tue Nov 06 18:38:35 CST 2018
+base.0=E\:\\360MoveData\\Users\\Administrator\\Documents\\GitHub\\projects-demo\\android-Camera2Video-master\\Application\\build\\intermediates\\transforms\\dexMerger\\debug\\0
 path.0=classes.dex
 renamed.0=classes.dex

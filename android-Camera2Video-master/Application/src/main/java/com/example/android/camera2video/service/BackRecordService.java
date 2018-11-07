@@ -79,6 +79,8 @@ public class BackRecordService extends Service {
         onLog("onCreate !");
         openCamera();
         startBackgroundThread();
+
+
     }
 
     //    @Subscribe(threadMode = ThreadMode.MAIN)
@@ -93,6 +95,7 @@ public class BackRecordService extends Service {
         stopBackgroundThread();
         stopSelf();
     }
+
 
     @SuppressWarnings("MissingPermission")
     private void openCamera() {
@@ -241,8 +244,25 @@ public class BackRecordService extends Service {
             mMediaRecorder.stop();
             mMediaRecorder.reset();
             onLog("Video saved: " + mNextVideoAbsolutePath);
+            lockFile(new File(mNextVideoAbsolutePath));
             mNextVideoAbsolutePath = null;
         } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    //    r=4，w=2，x=1
+    // 若要rwx属性则4+2+1=7;
+    // 若要rw-属性则4+2=6;
+    // 若要r-x属性则4+1=7。
+    private void lockFile(File appFile) {
+        try {
+            String command = "chmod 111 " + appFile.getAbsolutePath();
+            Log.i("zyl", "command = " + command);
+            Runtime runtime = Runtime.getRuntime();
+            Process proc = runtime.exec(command);
+        } catch (IOException e) {
+            Log.i("zyl", "chmod fail!!!!");
             e.printStackTrace();
         }
     }
@@ -255,41 +275,36 @@ public class BackRecordService extends Service {
             onLog("startRecordingVideo !");
             closePreviewSession();
             setUpMediaRecorder();
-            createCaptureSession();
+            mPreviewBuilder = mCameraDevice.createCaptureRequest(CameraDevice.TEMPLATE_RECORD);
+            List<Surface> surfaces = new ArrayList<>();
+            Surface recorderSurface = mMediaRecorder.getSurface();
+            surfaces.add(recorderSurface);
+            mPreviewBuilder.addTarget(recorderSurface);
+            mCameraDevice.createCaptureSession(surfaces, new CameraCaptureSession.StateCallback() {
+
+                @Override
+                public void onConfigured(@NonNull CameraCaptureSession cameraCaptureSession) {
+                    mPreviewSession = cameraCaptureSession;
+                    updatePreview();
+                    mBackgroundHandler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            mMediaRecorder.start();
+                        }
+                    });
+                    onLog("CameraDevice onConfigured ! Start recording !");
+                }
+
+                @Override
+                public void onConfigureFailed(@NonNull CameraCaptureSession cameraCaptureSession) {
+                    onLog("CameraDevice onConfigureFailed !");
+                }
+            }, mBackgroundHandler);
         } catch (CameraAccessException | IOException e) {
             e.printStackTrace();
         }
 
     }
-
-    private void createCaptureSession() throws CameraAccessException {
-        mPreviewBuilder = mCameraDevice.createCaptureRequest(CameraDevice.TEMPLATE_RECORD);
-        List<Surface> surfaces = new ArrayList<>();
-        Surface recorderSurface = mMediaRecorder.getSurface();
-        surfaces.add(recorderSurface);
-        mPreviewBuilder.addTarget(recorderSurface);
-        mCameraDevice.createCaptureSession(surfaces, new CameraCaptureSession.StateCallback() {
-
-            @Override
-            public void onConfigured(@NonNull CameraCaptureSession cameraCaptureSession) {
-                mPreviewSession = cameraCaptureSession;
-                updatePreview();
-                mBackgroundHandler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        mMediaRecorder.start();
-                    }
-                });
-                onLog("CameraDevice onConfigured ! Start recording !");
-            }
-
-            @Override
-            public void onConfigureFailed(@NonNull CameraCaptureSession cameraCaptureSession) {
-                onLog("CameraDevice onConfigureFailed !");
-            }
-        }, mBackgroundHandler);
-    }
-
 
     private void updatePreview() {
         if (null == mCameraDevice) {
