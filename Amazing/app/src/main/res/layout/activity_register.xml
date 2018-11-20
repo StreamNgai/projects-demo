@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimary"
+    tools:context="dev.weihl.amazing.business.account.RegisterActivity">
+
+    <ImageButton
+        android:id="@+id/close"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_margin="16dp"
+        android:background="@android:color/transparent"
+        android:src="@drawable/ic_close"/>
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/close"
+        android:layout_marginLeft="32dp"
+        android:text="@string/user_register"
+        android:textColor="@android:color/white"
+        android:textSize="35sp"/>
+
+    <android.support.v7.widget.AppCompatEditText
+        android:id="@+id/accName"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:layout_below="@+id/textView"
+        android:layout_marginLeft="36dp"
+        android:layout_marginRight="36dp"
+        android:inputType="text"
+        android:layout_marginTop="26dp"
+        android:background="@android:color/transparent"
+        android:hint="@string/acc_name"
+        android:textColor="@android:color/white"
+        android:textColorHint="@android:color/white"
+        android:textSize="26sp"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@+id/accName"
+        android:layout_marginLeft="36dp"
+        android:layout_marginRight="36dp"
+        android:background="@android:color/white"/>
+
+    <android.support.v7.widget.AppCompatEditText
+        android:id="@+id/email"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:inputType="textEmailAddress"
+        android:layout_below="@+id/accName"
+        android:layout_marginLeft="36dp"
+        android:layout_marginRight="36dp"
+        android:layout_marginTop="16dp"
+        android:background="@android:color/transparent"
+        android:hint="@string/email"
+        android:textColor="@android:color/white"
+        android:textColorHint="@android:color/white"
+        android:textSize="26sp"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@+id/email"
+        android:layout_marginLeft="36dp"
+        android:layout_marginRight="36dp"
+        android:background="@android:color/white"/>
+
+    <android.support.v7.widget.AppCompatEditText
+        android:id="@+id/password"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:layout_below="@+id/email"
+        android:inputType="textPassword"
+        android:layout_marginLeft="36dp"
+        android:layout_marginRight="36dp"
+        android:layout_marginTop="16dp"
+        android:background="@android:color/transparent"
+        android:hint="@string/password"
+        android:textColor="@android:color/white"
+        android:textColorHint="@android:color/white"
+        android:textSize="26sp"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@+id/password"
+        android:layout_marginLeft="36dp"
+        android:layout_marginRight="36dp"
+        android:background="@android:color/white"/>
+
+
+    <Button
+        android:id="@+id/nextStep"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/password"
+        android:layout_alignRight="@+id/password"
+        android:layout_below="@+id/password"
+        android:layout_marginTop="32dp"
+        android:background="@color/colorAccent"
+        android:stateListAnimator="@null"
+        android:text="@string/next_step"
+        android:textColor="@android:color/white"
+        android:textSize="26sp"/>
+
+    <RelativeLayout
+        android:id="@+id/progressBar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#69000000"
+        android:visibility="gone">
+
+        <ProgressBar
+            style="?android:attr/progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:background="@android:color/transparent"/>
+    </RelativeLayout>
+</RelativeLayout>

@@ -1,0 +1,48 @@
+<resources>
+    <string name="app_name">唯色影</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_login">Fantastic</string>
+
+    <!-- Strings related to login -->
+    <string name="prompt_email">邮 箱</string>
+    <string name="prompt_password">密 码(至少6位)</string>
+    <string name="action_sign_in">登   录</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="error_invalid_email">This email address is invalid</string>
+    <string name="error_invalid_password">This password is too short</string>
+    <string name="error_incorrect_password">This password is incorrect</string>
+    <string name="error_field_required">This field is required</string>
+    <string name="permission_rationale">"Contacts permissions are needed for providing email
+        completions."
+    </string>
+    <string name="copy_right">GuangZhou Fantastic Technology CO,Ltd\nCopyright@ 2015-2017</string>
+
+    <string name="register_name">用户名</string>
+    <string name="register_psw">密码</string>
+    <string name="register_email">注册邮箱</string>
+    <string name="register">注 册</string>
+
+
+    <string name="about">
+\t\t金币计算方式:\n
+\t\t1、金币 = 10(Min) * 10 。每10分钟计算一次。\n\n
+\t\t兑换类型:\n
+\t\t1、部分质量高的类型需要兑换后才可以浏览。\n
+\t\t2、随时关注活动，期间质量高的类型有积分或金币赠送。\n
+\t\t3、批量开通类型享更多优惠!
+</string>
+
+
+    <string name="collect_not_pay">您还没有任何收藏\n通过发现首页,点击收藏可添加\n</string>
+    <string name="collect_has_pay">您未兑换任何专辑\n通过浏览专辑,点击兑换可添加\n</string>
+    <string name="app_introduction">唯色影，唯摄影\n海量美媚专辑图片，任君选看\n分享大师对艺术与生活觉悟的高质量摄影专辑</string>
+    <string name="title_activity_feed_backs">FeedBacksActivity</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_functions_about">FunctionsAboutActivity</string>
+    <string name="title_activity_app_abouts">AppAboutsActivity</string>
+    <string name="title_activity_recharges">RechargesActivity</string>
+
+
+</resources>

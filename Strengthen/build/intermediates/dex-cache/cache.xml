@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        is-multidex="false"
+        jar="/Users/Ngai/AndroidStudioProjects/Strengthen/app/build/intermediates/exploded-aar/com.jakewharton/butterknife/8.5.1/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.3"
+        sha1="19f281a785ca0eb5f6799fc7bf7ca199a9ca1e8b">
+        <dex dex="/Users/Ngai/AndroidStudioProjects/Strengthen/app/build/intermediates/pre-dexed/debug/com.jakewharton-butterknife-8.5.1_9e982da6815f1052d024fb7f409d6324025655c0.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/Ngai/AndroidStudioProjects/Strengthen/app/build/intermediates/exploded-aar/com.android.support/support-core-ui/25.3.1/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.3"
+        sha1="052f5f840f21174a3ecf6544130194e2652cbb73">
+        <dex dex="/Users/Ngai/AndroidStudioProjects/Strengthen/app/build/intermediates/pre-dexed/debug/com.android.support-support-core-ui-25.3.1_542e93ee1ea3fb2a08f05be3c5f782932904c38c.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/Ngai/.gradle/caches/modules-2/files-2.1/com.jakewharton/butterknife-annotations/8.5.1/bb67dad90bab7cd77a8f7f1b8442b47e3a2326bc/butterknife-annotations-8.5.1.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.3"
+        sha1="bb67dad90bab7cd77a8f7f1b8442b47e3a2326bc">
+        <dex dex="/Users/Ngai/AndroidStudioProjects/Strengthen/app/build/intermediates/pre-dexed/debug/butterknife-annotations-8.5.1_8999a89546e356c803ff2f83131d6d78e79d1876.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/Ngai/AndroidStudioProjects/Strengthen/app/build/intermediates/exploded-aar/com.android.support/support-v4/25.3.1/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.3"
+        sha1="d7c42c80f6509b9ea4db28ca7859ffae08ec5741">
+        <dex dex="/Users/Ngai/AndroidStudioProjects/Strengthen/app/build/intermediates/pre-dexed/debug/com.android.support-support-v4-25.3.1_c7521b4e28b0cfa14e516c421cb254813e443c25.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/Ngai/Library/Android/sdk/extras/android/m2repository/com/android/support/support-annotations/25.3.1/support-annotations-25.3.1.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.3"
+        sha1="bf8841d29fa39e077730e7a91222c2ce269fa7c9">
+        <dex dex="/Users/Ngai/AndroidStudioProjects/Strengthen/app/build/intermediates/pre-dexed/debug/support-annotations-25.3.1_c4650764afaaa37bb17dec9070a1aaf40e03818b.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/Ngai/AndroidStudioProjects/Strengthen/app/build/intermediates/exploded-aar/com.android.support/support-core-utils/25.3.1/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.3"
+        sha1="6ef31f1555bb4cc513ec8d52711365a8b89f3600">
+        <dex dex="/Users/Ngai/AndroidStudioProjects/Strengthen/app/build/intermediates/pre-dexed/debug/com.android.support-support-core-utils-25.3.1_5b95fd1d96b11625fca95dac41fe850a4b30ae36.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/Ngai/AndroidStudioProjects/Strengthen/app/build/intermediates/exploded-aar/com.android.support/support-fragment/25.3.1/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.3"
+        sha1="4a26a1154d053ab11aaf4c3967c42a4d66390991">
+        <dex dex="/Users/Ngai/AndroidStudioProjects/Strengthen/app/build/intermediates/pre-dexed/debug/com.android.support-support-fragment-25.3.1_88675a54f4311bb42437fe83ae6c372d54b2248a.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/Ngai/AndroidStudioProjects/Strengthen/app/build/intermediates/exploded-aar/com.android.support/support-media-compat/25.3.1/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.3"
+        sha1="45f697922e6f072daa12f8a2995dc77ab03c11da">
+        <dex dex="/Users/Ngai/AndroidStudioProjects/Strengthen/app/build/intermediates/pre-dexed/debug/com.android.support-support-media-compat-25.3.1_fa987f82e429392f3d6d685977404b4112d9c9a1.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/Ngai/AndroidStudioProjects/Strengthen/app/build/intermediates/exploded-aar/com.android.support/animated-vector-drawable/25.3.1/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.3"
+        sha1="47635644d0d5c103c1dd8360549eb9ba3225c7d3">
+        <dex dex="/Users/Ngai/AndroidStudioProjects/Strengthen/app/build/intermediates/pre-dexed/debug/com.android.support-animated-vector-drawable-25.3.1_28a76c87f31b5f329927827b2a8edba5bd13dd3f.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/Ngai/AndroidStudioProjects/Strengthen/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/25.3.1/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.3"
+        sha1="150252b33b00274cc868578ade018fda0d43a3eb">
+        <dex dex="/Users/Ngai/AndroidStudioProjects/Strengthen/app/build/intermediates/pre-dexed/debug/com.android.support-appcompat-v7-25.3.1_015701b74171044283f30d651367181301463238.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/Ngai/AndroidStudioProjects/Strengthen/app/build/intermediates/exploded-aar/com.android.support/support-compat/25.3.1/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.3"
+        sha1="da27a32db6af8954ee8061537c7d476fcb1df46f">
+        <dex dex="/Users/Ngai/AndroidStudioProjects/Strengthen/app/build/intermediates/pre-dexed/debug/com.android.support-support-compat-25.3.1_be7735e2436a79d695ef4668df2c147beb675a11.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/Ngai/AndroidStudioProjects/Strengthen/app/build/intermediates/exploded-aar/com.android.support/support-vector-drawable/25.3.1/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.3"
+        sha1="efb8cb62d47d157c29d1521daac7eefd4cb881ee">
+        <dex dex="/Users/Ngai/AndroidStudioProjects/Strengthen/app/build/intermediates/pre-dexed/debug/com.android.support-support-vector-drawable-25.3.1_2fae431b25c77a5e8c6aba8e0c3d65d6a4a15b83.jar" />
+    </item>
+
+</items>
