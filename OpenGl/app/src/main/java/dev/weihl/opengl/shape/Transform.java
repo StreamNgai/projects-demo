@@ -7,30 +7,32 @@ import java.util.ArrayList;
 
 import javax.microedition.khronos.opengles.GL10;
 
-public class Sinline extends Oval {
+import dev.weihl.opengl.shape.helper.DigitHelper;
 
-  //  https://www.desmos.com/calculator/kihjluohq9
+public class Transform extends Oval {
+
+    //  https://www.desmos.com/calculator/kihjluohq9
     float aRadio = 0.9f;
     float bRadio = 0.3f;
 
     float mCircleX = 0.0f;
     float mCircleY = 0.0f;
-    Helper.RoundDigit aDigit;
-    Helper.RoundDigit bDigit;
-    Helper.RoundDigit mOvalDigit;
+    DigitHelper.RoundDigit aDigit;
+    DigitHelper.RoundDigit bDigit;
+    DigitHelper.SquareRoundDigit mOvalDigit;
 
-    public Sinline(View view) {
+    public Transform(View view) {
         super(view);
-        aDigit = Helper.createRoundDigit(-0.9f, 0.9f, 0.001f);
-        bDigit = Helper.createRoundDigit(-0.9f, 0.9f, 0.001f);
+        aDigit = DigitHelper.createRoundDigit(-0.9f, 0.9f, 0.001f);
+        bDigit = DigitHelper.createRoundDigit(-0.9f, 0.9f, 0.001f);
 
-        mOvalDigit = Helper.createRoundDigit(0.0f, 360.0f, 0.001f);
+        mOvalDigit = DigitHelper.createSquareRoundDigit(-1.0f, -1.0f, 1.0f, 1.0f, 0.001f, 0.003f);
     }
 
-    // 三角点
+    // 三角点   https://www.desmos.com/calculator/kihjluohq9
     protected float[] createPositions() {
         ArrayList<Float> data = new ArrayList<>();
-        data.add(mCircleX);             //设置圆心坐标
+        data.add(mCircleX);//设置圆心坐标
         data.add(mCircleY);
         data.add(height);
         float angDegSpan = 0.05f;
@@ -53,10 +55,10 @@ public class Sinline extends Oval {
         aRadio = aDigit.get(); // X
         bRadio = bDigit.get(); // X
 
-//        float angD = mOvalDigit.get();
-//        mCircleX = (float) Math.cos(angD);
-//        mCircleY = (float) Math.sin(angD);
-//        Log.d("Sinline", "aRadio = " + aRadio + " ; bRadio = " + bRadio + " ; OvalDigit = " + angD);
+        float[] angD = mOvalDigit.get();
+        mCircleX = angD[0];
+        mCircleY = angD[1];
+        Log.d("onDrawFrame", "mCircleX = " + mCircleX + " ; mCircleY = " + mCircleY);
         refreshPositions();
     }
 
