@@ -62,6 +62,14 @@ public class DigitHelper {
             this.mDirection = 1;
         }
 
+        public boolean isMax() {
+            return mMax == mRadio;
+        }
+
+        public boolean isMin() {
+            return mMax == mRadio;
+        }
+
         public float get() {
             switch (mDirection) {
                 case 1: // ++

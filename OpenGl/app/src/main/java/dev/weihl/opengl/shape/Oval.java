@@ -13,20 +13,7 @@ import javax.microedition.khronos.opengles.GL10;
 
 public class Oval extends Shape {
 
-    private final String TAG = "Triangle";
-
-//    float mVertexSrc[] = {
-//            -0.5f, 0.5f, 0.0f, // 0
-//            0.5f, 0.5f, 0.0f,// 1
-//            -0.5f, -0.5f, 0.0f,// 2
-//            0.5f, -0.5f, 0.0f// 3
-//    };
-
-//    float mColorSrc[] = {//
-//            69.0f / 255, 95.0f / 255, 175.0f / 255, 0.0f,
-//            36.0f / 255, 30.0f / 255, 90.0f / 255, 0.0f,
-//            36.0f / 255, 30.0f / 255, 90.0f / 255, 0.0f
-//    };
+    private final String TAG = "Oval";
 
     String mVertexShaderCode = "" +
             "attribute vec4 vPosition;" +
@@ -54,7 +41,6 @@ public class Oval extends Shape {
             0, 2, 3, 0, 1, 3
     };
 
-
     float radius = 1.0f;
     int n = 360;  //切割份数
 
@@ -64,7 +50,7 @@ public class Oval extends Shape {
 
     public Oval(View view) {
         super(view);
-        Log.d(TAG, "Triangle() !");
+        Log.d(TAG, "Oval() !");
     }
 
     void refreshPositions(){
@@ -163,7 +149,6 @@ public class Oval extends Shape {
     @Override
     public void onSurfaceCreated(GL10 gl, EGLConfig config) {
         Log.d(TAG, "onSurfaceCreated !");
-
         createInit();
     }
 

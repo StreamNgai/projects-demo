@@ -65,9 +65,9 @@ public class TriangleColorFull extends Shape {
 
     //设置颜色
     float color[] = {
-            0.0f, 1.0f, 0.0f, 1.0f ,
-            1.0f, 0.0f, 0.0f, 1.0f,
-            0.0f, 0.0f, 1.0f, 1.0f
+            0.0f, 1.0f, 0.0f, 0.0f ,
+            1.0f, 0.0f, 0.0f, 0.0f,
+            0.0f, 0.0f, 1.0f, 0.0f
     };
 
     public TriangleColorFull(View mView) {

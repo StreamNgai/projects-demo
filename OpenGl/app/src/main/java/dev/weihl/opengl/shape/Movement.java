@@ -7,6 +7,7 @@ import android.view.View;
 
 import javax.microedition.khronos.opengles.GL10;
 
+import dev.weihl.opengl.shape.helper.DigitHelper;
 import dev.weihl.opengl.shape.helper.VaryHelper;
 
 public class Movement extends Transform {
@@ -15,8 +16,10 @@ public class Movement extends Transform {
     int mMatrix;
     float[] matrixArr;
     VaryHelper mVaryHelper;
-    int mX, mY;
-    int mScale = 1;
+    float mScale = 1f;
+    DigitHelper.SquareRoundDigit mTranslateDigit;
+    DigitHelper.RoundDigit mScaleDigit;
+
 
     public Movement(View view) {
         super(view);
@@ -48,6 +51,9 @@ public class Movement extends Transform {
     void createInit() {
         super.createInit();
         mMatrix = GLES20.glGetUniformLocation(mProgram, "vMatrix");
+        float tOff = 10;
+        mTranslateDigit = DigitHelper.createSquareRoundDigit(-tOff, -tOff, tOff, tOff, 0.01f, 0.01f);
+        mScaleDigit = DigitHelper.createRoundDigit(1.5f, 35f, 0.05f);
     }
 
     @Override
@@ -65,9 +71,11 @@ public class Movement extends Transform {
         GLES20.glUseProgram(mProgram);
 
         mVaryHelper.pushMatrix();
-        mVaryHelper.translate(mCircleX, mCircleY, 0);
+        float[] xY = mTranslateDigit.get();
+        mVaryHelper.translate(xY[0], xY[1], 0);
+        mScale = mScaleDigit.get();
         Log.d(TAG, "mScale = " + mScale);
-        mVaryHelper.scale(3f, 3f, 1f);
+        mVaryHelper.scale(mScale, mScale, 0f);
         matrixArr = mVaryHelper.getFinalMatrix();
         if (matrixArr != null) {
             GLES20.glUniformMatrix4fv(mMatrix, 1, false, matrixArr, 0);

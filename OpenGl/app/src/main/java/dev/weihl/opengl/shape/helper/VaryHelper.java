@@ -5,9 +5,6 @@ import android.opengl.Matrix;
 import java.util.Arrays;
 import java.util.Stack;
 
-/**
- * Created by wuwang on 2016/10/30
- */
 
 public class VaryHelper {
 
