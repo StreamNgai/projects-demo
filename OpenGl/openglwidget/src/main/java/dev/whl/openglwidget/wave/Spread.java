@@ -41,7 +41,7 @@ public class Spread extends Shape {
     float[] mVertexSrc;
 
     // 可变参数
-    float aLeftRightMove = -1.0f; // 左右延伸
+    float aLeftRightMove = 0.0f; // 左右延伸
     float bUpDownMove = 1.00f;// 上下平移
     DigitHelper.RoundDigit aLeftRightDigit;
     DigitHelper.RoundDigit bUpDownDigit;

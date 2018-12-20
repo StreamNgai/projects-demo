@@ -27,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
         glSurfaceView.setCallBack(new VolumeWaveView.CallBack() {
             @Override
             public void onClickTape() {
-                mHandler.postDelayed(volRunnable, 1000);
+                mHandler.postDelayed(volRunnable, 2000);
             }
         });
     }

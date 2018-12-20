@@ -4,15 +4,14 @@ import android.content.Context;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 import android.util.AttributeSet;
-import android.util.Log;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
 public class WaveView extends GLSurfaceView implements GLSurfaceView.Renderer {
 
-    Wave mLineOne;
-    Wave mLineTwo;
+    Wave mWaveOne;
+    Wave mWaveTwo;
     Spread mSpreadOne;
     Spread mSpreadTwo;
     Action mAction = Action.Unknown;
@@ -35,15 +34,15 @@ public class WaveView extends GLSurfaceView implements GLSurfaceView.Renderer {
         setEGLContextClientVersion(2);
         setRenderer(this);
 
-        mLineOne = new Wave(this, "green");
-        mLineOne.setAmplitude(1f);
-        mLineOne.setLineColor(19f, 101f, 0f, 255f);
-        mLineOne.setLineWidth(6);
+        mWaveOne = new Wave(this, "green");
+        mWaveOne.setAmplitude(1f);
+        mWaveOne.setLineColor(19f, 101f, 0f, 255f);
+        mWaveOne.setLineWidth(6);
 
-        mLineTwo = new Wave(this, "blue");
-        mLineTwo.setAmplitude(1f);
-        mLineTwo.setLineColor(0f, 117f, 251f, 255f);
-        mLineTwo.setLineWidth(10);
+        mWaveTwo = new Wave(this, "blue");
+        mWaveTwo.setAmplitude(1f);
+        mWaveTwo.setLineColor(0f, 117f, 251f, 255f);
+        mWaveTwo.setLineWidth(10);
 
         mSpreadOne = new Spread(this, "green");
         mSpreadOne.setLineWidth(6);
@@ -60,8 +59,8 @@ public class WaveView extends GLSurfaceView implements GLSurfaceView.Renderer {
     @Override
     public void onSurfaceCreated(GL10 gl, EGLConfig config) {
         GLES20.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-        mLineOne.onSurfaceCreated(gl, config);
-        mLineTwo.onSurfaceCreated(gl, config);
+        mWaveOne.onSurfaceCreated(gl, config);
+        mWaveTwo.onSurfaceCreated(gl, config);
         mSpreadOne.onSurfaceCreated(gl, config);
         mSpreadTwo.onSurfaceCreated(gl, config);
     }
@@ -69,8 +68,8 @@ public class WaveView extends GLSurfaceView implements GLSurfaceView.Renderer {
     @Override
     public void onSurfaceChanged(GL10 gl, int width, int height) {
         GLES20.glViewport(0, 0, width, height);
-        mLineOne.onSurfaceChanged(gl, width, height);
-        mLineTwo.onSurfaceChanged(gl, width, height);
+        mWaveOne.onSurfaceChanged(gl, width, height);
+        mWaveTwo.onSurfaceChanged(gl, width, height);
         mSpreadOne.onSurfaceChanged(gl, width, height);
         mSpreadTwo.onSurfaceChanged(gl, width, height);
     }
@@ -87,8 +86,8 @@ public class WaveView extends GLSurfaceView implements GLSurfaceView.Renderer {
                 mSpreadTwo.onDrawFrame(gl);
                 break;
             case Wave:
-                mLineOne.onDrawFrame(gl);
-                mLineTwo.onDrawFrame(gl);
+                mWaveOne.onDrawFrame(gl);
+                mWaveTwo.onDrawFrame(gl);
                 break;
             default:
                 // Unknown
@@ -106,6 +105,8 @@ public class WaveView extends GLSurfaceView implements GLSurfaceView.Renderer {
     }
 
     public void doWaveAnim() {
+        mWaveOne.setAmplitude(6.0f);
+        mWaveTwo.setAmplitude(6.0f);
         mAction = Action.Wave;
     }
 
@@ -138,8 +139,8 @@ public class WaveView extends GLSurfaceView implements GLSurfaceView.Renderer {
      * 控制线条振幅，从设置值衰减到最低
      */
     public void setAmplitude(float lineGreen, float lineBlue) {
-        mLineOne.setAmplitude(lineGreen);
-        mLineTwo.setAmplitude(lineBlue);
+        mWaveOne.setAmplitude(lineGreen);
+        mWaveTwo.setAmplitude(lineBlue);
     }
 
 }

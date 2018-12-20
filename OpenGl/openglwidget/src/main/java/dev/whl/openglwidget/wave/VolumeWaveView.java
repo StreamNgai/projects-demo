@@ -56,6 +56,7 @@ public class VolumeWaveView extends RelativeLayout {
                         narrowX.setDuration(600);
                         narrowY.start();
                         narrowX.start();
+                        mTapeBtn.setFocusable(true);
                     }
                 });
             }
@@ -79,6 +80,7 @@ public class VolumeWaveView extends RelativeLayout {
                         mWaveView.doSpreadAnim();
                     }
                 });
+                v.setFocusable(false);
                 if(mCallBack != null){
                     mCallBack.onClickTape();
                 }

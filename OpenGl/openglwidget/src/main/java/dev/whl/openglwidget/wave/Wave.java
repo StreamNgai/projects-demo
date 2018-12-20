@@ -41,8 +41,8 @@ public class Wave extends Shape {
     float[] mVertexSrc;
 
     // 可变参数
-    float aMove = -1.0f; // 波纹移动速率,可控
-    float bAmplitude = 1.00f;// 音量大小 衰减到2.0f时不在变化
+    float aMove = 0.0f; // 波纹移动速率,可控
+    float bAmplitude = 6.00f;// 音量大小 衰减到2.0f时不在变化
     DigitHelper.RoundDigit aMoveDigit;
     DigitHelper.RoundDigit bAmpltDigit;
     WavePoints mLinePoints;
@@ -51,13 +51,14 @@ public class Wave extends Shape {
     public Wave(View view, @NonNull String name) {
         super(view);
         mLineName = name;
-        aMoveDigit = DigitHelper.createRoundDigit(0.0f, 30.0f, 1f);
+        aMoveDigit = DigitHelper.createRoundDigit(0.0f, 30.0f, 0.3f);
         bAmpltDigit = DigitHelper.createRoundDigit(1.00f, 6.00f, 0.1f);
         mLinePoints = WavePoints.getInstance();
         Log.d(TAG, "Wave() ! " + mLineName);
     }
 
     public void setAmplitude(float num) {
+        aMoveDigit.reset();
         bAmpltDigit.setDecreaseNum(num);
     }
 
