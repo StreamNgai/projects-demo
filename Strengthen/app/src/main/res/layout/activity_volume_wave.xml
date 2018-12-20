@@ -4,11 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activity.MainActivity">
+    tools:context=".activity.VolumeWaveActivity">
 
-    <dev.weihl.opengl.widget.GlView
-        android:id="@+id/glview"
+
+    <dev.weihl.widget.VolumeWaveView
+        android:layout_marginTop="30dp"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"  />
+        android:layout_height="60dp"
+        android:background="#c4c4c4"/>
+
 
 </LinearLayout>

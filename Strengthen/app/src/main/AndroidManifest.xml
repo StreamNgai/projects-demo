@@ -39,6 +39,14 @@
                 android:name="ChildName"
                 android:value="Text-绘制" />
         </activity>
+        <activity android:name=".activity.VolumeWaveActivity">
+            <meta-data
+                android:name="Group"
+                android:value="View" />
+            <meta-data
+                android:name="ChildName"
+                android:value="音量波形" />
+        </activity>
     </application>
 
 </manifest>

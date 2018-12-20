@@ -4,25 +4,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#b9b9b9"
     tools:context=".activity.MainActivity">
 
 
 
-
-
-
-
-
-    <dev.weihl.opengl.GLView
-        android:id="@+id/glview"
+    <dev.whl.openglwidget.wave.VolumeWaveView
+        android:id="@+id/volumeWaveView"
+        android:layout_gravity="center"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-
-
-
-
-
-
+        android:layout_height="80dp" />
 
 
 

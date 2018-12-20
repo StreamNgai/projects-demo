@@ -1,7 +1,14 @@
 package dev.weihl.opengl.shape.helper;
 
+import android.util.Log;
+
+import java.text.DecimalFormat;
+
 public class DigitHelper {
 
+    private static void log(String text) {
+        Log.d("DigitHelper", text);
+    }
 
     static public RoundDigit createRoundDigit(float min, float max, float offset) {
         return new RoundDigit(min, max, offset);
@@ -51,43 +58,88 @@ public class DigitHelper {
         float mMin;
         float mMax;
         float mOffset;
-        float mRadio;
+        float mValue;
+        DecimalFormat df;
+        float[] mData;
+        int mFullFrame;
+        int mCurrIndex;
 
         // 返回两点之间游离点
         private RoundDigit(float min, float max, float offset) {
             this.mMin = min;
             this.mMax = max;
             this.mOffset = offset;
-            this.mRadio = min;
-            this.mDirection = 1;
+            this.mValue = min;
+            this.mDirection = 1; // 先递增
+            this.mCurrIndex = -1;
+            df = new DecimalFormat(String.valueOf(offset));
+            mFullFrame = (int) ((mMax - mMin) / mOffset);
+            mData = new float[mFullFrame + 1];
+            log((mFullFrame + 1) + "<---- 帧");
+            for (int i = 0; i <= mFullFrame; i++) {
+                mData[i] = Float.valueOf(df.format(min + i * offset));
+                log(mData[i] + "");
+            }
+        }
+
+        public void setDecreaseNum(float num) {
+            mDirection = 0;
+            mCurrIndex = mFullFrame;
+            for (int i = mFullFrame; i > 0; i--) {
+                if (num < mData[i]) {
+                    mCurrIndex = i;
+                }
+            }
+        }
+
+        public void setIncrease(float num) {
+            mDirection = 1;
+            mCurrIndex = 0;
+            for (int i = mFullFrame; i > 0; i--) {
+                if (num < mData[i]) {
+                    mCurrIndex = i;
+                }
+            }
+        }
+
+        public void reset() {
+            mDirection = 1;
+            mCurrIndex = -1;
+            mValue = mMin;
+        }
+
+        public int getFullFrame() {
+            return mFullFrame + 1;
         }
 
         public boolean isMax() {
-            return mMax == mRadio;
+            return mMax == mValue;
         }
 
         public boolean isMin() {
-            return mMax == mRadio;
+            return mMax == mValue;
         }
 
         public float get() {
             switch (mDirection) {
                 case 1: // ++
-                    mRadio += mOffset;
-                    if (mRadio >= mMax) {
+                    if (mCurrIndex == mFullFrame) {
                         mDirection = 0;
-                        mRadio = mMax;
+                        mValue = mMax;
+                    } else {
+                        mValue = mData[++mCurrIndex];
                     }
                     break;
                 default: // --
-                    mRadio -= mOffset;
-                    if (mRadio <= mMin) {
+                    if (mCurrIndex == 0) {
                         mDirection = 1;
-                        mRadio = mMin;
+                        mValue = mMin;
+                    } else {
+                        mValue = mData[--mCurrIndex];
                     }
                     break;
             }
-            return mRadio;
+            return mValue;
         }
     }
 

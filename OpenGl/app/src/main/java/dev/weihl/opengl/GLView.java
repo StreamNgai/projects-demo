@@ -3,6 +3,7 @@ package dev.weihl.opengl;
 import android.content.Context;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
+import android.os.Handler;
 import android.util.AttributeSet;
 import android.util.Log;
 
@@ -10,7 +11,10 @@ import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
 import dev.weihl.opengl.shape.Irregular;
+import dev.weihl.opengl.shape.Lines;
+import dev.weihl.opengl.shape.Oval;
 import dev.weihl.opengl.shape.Square;
+import dev.weihl.opengl.shape.Triangle;
 import dev.weihl.opengl.shape.Warp;
 import dev.weihl.opengl.shape.WarpOne;
 import dev.weihl.opengl.shape.WarpTwo;
@@ -18,8 +22,7 @@ import dev.weihl.opengl.shape.WarpTwo;
 
 public class GLView extends GLSurfaceView implements GLSurfaceView.Renderer {
 
-    Warp mWarp;
-
+    Lines mWarp;
     public GLView(Context context) {
         this(context, null);
     }
@@ -27,15 +30,14 @@ public class GLView extends GLSurfaceView implements GLSurfaceView.Renderer {
     public GLView(Context context, AttributeSet attrs) {
         super(context, attrs);
         Log.d("GLView", " GLView!");
-
         setEGLContextClientVersion(2);
         setRenderer(this);
-        mWarp = new Warp(this);
+        mWarp = new Lines(this);
     }
 
     @Override
     public void onSurfaceCreated(GL10 gl, EGLConfig config) {
-        GLES20.glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+        GLES20.glClearColor(1.0f, 1.0f, 1.0f, 0.0f);
         mWarp.onSurfaceCreated(gl, config);
     }
 
