@@ -70,23 +70,7 @@ public class VolumeWaveView extends RelativeLayout {
         return new OnClickListener() {
             @Override
             public void onClick(View v) {
-                ObjectAnimator narrowX = ObjectAnimator.ofFloat(v, "scaleX", 1, 0);
-                ObjectAnimator narrowY = ObjectAnimator.ofFloat(v, "scaleY", 1, 0);
-                narrowY.setDuration(600);
-                narrowX.setDuration(600);
-                narrowY.start();
-                narrowX.start();
-                narrowY.addListener(new AnimatorListenerAdapter() {
-                    @Override
-                    public void onAnimationEnd(Animator animation) {
-                        super.onAnimationEnd(animation);
-                        mWaveView.doSpreadAnim();
-                    }
-                });
-                v.setFocusable(false);
-                if (mCallBack != null) {
-                    mCallBack.onClickTape();
-                }
+                doTapeAction();
             }
         };
     }
@@ -101,6 +85,31 @@ public class VolumeWaveView extends RelativeLayout {
 
     public void setAmplitude(Float lineOne, Float lineTwo) {
         mWaveView.setAmplitude(lineOne, lineTwo);
+    }
+
+    public void doTapeAction() {
+        getHandler().post(new Runnable() {
+            @Override
+            public void run() {
+                ObjectAnimator narrowX = ObjectAnimator.ofFloat(mTapeBtn, "scaleX", 1, 0);
+                ObjectAnimator narrowY = ObjectAnimator.ofFloat(mTapeBtn, "scaleY", 1, 0);
+                narrowY.setDuration(600);
+                narrowX.setDuration(600);
+                narrowY.start();
+                narrowX.start();
+                narrowY.addListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        super.onAnimationEnd(animation);
+                        mWaveView.doSpreadAnim();
+                    }
+                });
+                mTapeBtn.setFocusable(false);
+                if (mCallBack != null) {
+                    mCallBack.onClickTape();
+                }
+            }
+        });
     }
 
     public void doLoadingAnim() {
