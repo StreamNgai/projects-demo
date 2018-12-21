@@ -1,7 +1,9 @@
 package dev.whl.openglwidget.wave;
 
+import android.content.Context;
 import android.util.Log;
 
+import java.io.Serializable;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
@@ -11,13 +13,17 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Set;
 
-public class WavePoints {
+import dev.whl.openglwidget.FileCache;
+
+public class WavePoints implements Serializable {
 
     private static final WavePoints ourInstance = new WavePoints();
     float z = 0.0f;
     // 固定
-    private HashMap<String, FloatBuffer> mColorBuffers;
     private HashMap<String, float[]> mColorSrcs;
+    private float[] mDefaultColorSrc = {
+            1f, 1f, 1f, 1f
+    };
     // 随参数变化
     private HashMap<String, float[]> mWavePoints;
 
@@ -27,7 +33,6 @@ public class WavePoints {
 
     private WavePoints() {
         mWavePoints = new HashMap<>();
-        mColorBuffers = new HashMap<>();
         mColorSrcs = new HashMap<>();
     }
 
@@ -54,13 +59,13 @@ public class WavePoints {
         return buffer;
     }
 
-    public void setColor(float red,float green,float blue,float alpha, String colorBufferKey) {
+    public void setColor(float red, float green, float blue, float alpha, String colorBufferKey) {
         try {
-            mColorSrcs.put(colorBufferKey,new float[]{
-                    red/255f,
-                    green/255f,
-                    blue/255f,
-                    alpha/255f
+            mColorSrcs.put(colorBufferKey, new float[]{
+                    red / 255f,
+                    green / 255f,
+                    blue / 255f,
+                    alpha / 255f
             });
             createColorBuffer(colorBufferKey);
         } catch (Exception e) {
@@ -78,6 +83,7 @@ public class WavePoints {
         String keyId = findKeyId(move, amplitude);
         float[] tempPoints = createPositions(move, amplitude);
         mWavePoints.put(keyId, tempPoints);
+        hasNewPoints = true;
     }
 
     public float[] getLinePoints(float move, float amplitude) {
@@ -85,11 +91,7 @@ public class WavePoints {
         return mWavePoints.get(keyId);
     }
 
-    public FloatBuffer getColorBuffer(String colorBufferKey) {
-        return mColorBuffers.get(colorBufferKey);
-    }
-
-    public void createColorBuffer(String colorBufferKey) {
+    public FloatBuffer createColorBuffer(String colorBufferKey) {
         Set<String> keySet = mWavePoints.keySet();
         if (!keySet.isEmpty()) {
             Iterator<String> keyIt = keySet.iterator();
@@ -105,10 +107,11 @@ public class WavePoints {
                         colorSrc[++i] = cSrc[2];
                         colorSrc[++i] = cSrc[3];
                     }
-                    mColorBuffers.put(colorBufferKey, asFloatBuffer(colorSrc));
+                    return asFloatBuffer(colorSrc);
                 }
             }
         }
+        return asFloatBuffer(mDefaultColorSrc);
     }
 
     // 计算点线
@@ -199,6 +202,22 @@ public class WavePoints {
         Point(float x, float y) {
             this.x = x;
             this.y = y;
+        }
+    }
+
+    boolean hasNewPoints;
+
+    public void cacheDataPoints(final Context context) {
+        if (hasNewPoints) {
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    FileCache waveP = FileCache.get(context, "wavepoints");
+                    waveP.put("points", WavePoints.getInstance());
+                    Log.d("OpenGlWidget", "WavePoints Save !");
+                }
+            }).start();
+            hasNewPoints = false;
         }
     }
 }

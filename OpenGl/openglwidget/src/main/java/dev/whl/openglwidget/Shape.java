@@ -11,7 +11,7 @@ import java.nio.ShortBuffer;
 
 abstract public class Shape implements GLSurfaceView.Renderer {
 
-    View mView;
+    protected View mView;
 
     public Shape(View view) {
         this.mView = view;
@@ -49,5 +49,4 @@ abstract public class Shape implements GLSurfaceView.Renderer {
         buffer.position(0);
         return buffer;
     }
-
 }

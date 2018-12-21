@@ -1,7 +1,9 @@
 package dev.whl.openglwidget.wave;
 
+import android.content.Context;
 import android.util.Log;
 
+import java.io.Serializable;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
@@ -11,16 +13,21 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Set;
 
-public class SpreadPoints {
+import dev.whl.openglwidget.FileCache;
+
+public class SpreadPoints implements Serializable {
 
     private static final SpreadPoints ourInstance = new SpreadPoints();
     float z = 0.0f;
     // 固定
-    private HashMap<String, FloatBuffer> mColorBuffers;
     private HashMap<String, float[]> mColorSrcs;
+    private float[] mDefaultColorSrc = {
+            1f, 1f, 1f, 1f
+    };
     // 随参数变化
     private HashMap<String, float[]> mWavePoints;
     private Type mType = Type.LeftRight;
+    private boolean hasNewPoints;
 
     public void setType(Type type) {
         this.mType = type;
@@ -30,7 +37,21 @@ public class SpreadPoints {
         return mType == Type.LeftRight;
     }
 
-    enum Type {
+    public void cacheDataPoints(final Context context) {
+        if (hasNewPoints) {
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    FileCache speradP = FileCache.get(context, "speradpoints");
+                    speradP.put("points", SpreadPoints.getInstance());
+                    Log.d("OpenGlWidget", "SpreadPoints Save !");
+                }
+            }).start();
+            hasNewPoints = false;
+        }
+    }
+
+    enum Type implements Serializable {
         LeftRight("lr"),
         UpDown("ud");
 
@@ -47,7 +68,6 @@ public class SpreadPoints {
 
     private SpreadPoints() {
         mWavePoints = new HashMap<>();
-        mColorBuffers = new HashMap<>();
         mColorSrcs = new HashMap<>();
     }
 
@@ -105,6 +125,7 @@ public class SpreadPoints {
             tempPoints = createUDPositions(keyId, ud);
         }
         mWavePoints.put(keyId, tempPoints);
+        hasNewPoints = true;
     }
 
     private float[] createUDPositions(String keyId, float ud) {
@@ -131,11 +152,7 @@ public class SpreadPoints {
         return mWavePoints.get(keyId);
     }
 
-    public FloatBuffer getColorBuffer(String colorBufferKey) {
-        return mColorBuffers.get(colorBufferKey);
-    }
-
-    public void createColorBuffer(String colorBufferKey) {
+    public FloatBuffer createColorBuffer(String colorBufferKey) {
         Set<String> keySet = mWavePoints.keySet();
         if (!keySet.isEmpty()) {
             Iterator<String> keyIt = keySet.iterator();
@@ -151,10 +168,11 @@ public class SpreadPoints {
                         colorSrc[++i] = cSrc[2];
                         colorSrc[++i] = cSrc[3];
                     }
-                    mColorBuffers.put(colorBufferKey, asFloatBuffer(colorSrc));
+                    return asFloatBuffer(colorSrc);
                 }
             }
         }
+        return asFloatBuffer(mDefaultColorSrc);
     }
 
     // 计算点线

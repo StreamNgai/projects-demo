@@ -13,6 +13,8 @@ import android.widget.RelativeLayout;
 
 import com.example.openglwidget.R;
 
+import dev.whl.openglwidget.FileCache;
+
 public class VolumeWaveView extends RelativeLayout {
 
     WaveView mWaveView;
@@ -57,6 +59,7 @@ public class VolumeWaveView extends RelativeLayout {
                         narrowY.start();
                         narrowX.start();
                         mTapeBtn.setFocusable(true);
+
                     }
                 });
             }
@@ -81,7 +84,7 @@ public class VolumeWaveView extends RelativeLayout {
                     }
                 });
                 v.setFocusable(false);
-                if(mCallBack != null){
+                if (mCallBack != null) {
                     mCallBack.onClickTape();
                 }
             }

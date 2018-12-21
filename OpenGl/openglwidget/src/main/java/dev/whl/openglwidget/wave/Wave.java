@@ -11,6 +11,7 @@ import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
 import dev.whl.openglwidget.DigitHelper;
+import dev.whl.openglwidget.FileCache;
 import dev.whl.openglwidget.Shape;
 
 
@@ -53,7 +54,14 @@ public class Wave extends Shape {
         mLineName = name;
         aMoveDigit = DigitHelper.createRoundDigit(0.0f, 30.0f, 0.3f);
         bAmpltDigit = DigitHelper.createRoundDigit(1.00f, 6.00f, 0.1f);
-        mLinePoints = WavePoints.getInstance();
+        FileCache speradP = FileCache.get(view.getContext(), "wavepoints");
+        mLinePoints = (WavePoints) speradP.getAsObject("points");
+        if (mLinePoints != null) {
+            Log.d("FileCache", "read cache !");
+        } else {
+            mLinePoints = WavePoints.getInstance();
+            Log.d("FileCache", "getInstance !");
+        }
         Log.d(TAG, "Wave() ! " + mLineName);
     }
 
@@ -85,10 +93,8 @@ public class Wave extends Shape {
             mVertexBuffer = asFloatBuffer(mVertexSrc);
         }
 
-        mColorBuffer = mLinePoints.getColorBuffer(mLineName);
         if (mColorBuffer == null) {
-            mLinePoints.createColorBuffer(mLineName);
-            mColorBuffer = mLinePoints.getColorBuffer(mLineName);
+            mColorBuffer =  mLinePoints.createColorBuffer(mLineName);
         }
     }
 

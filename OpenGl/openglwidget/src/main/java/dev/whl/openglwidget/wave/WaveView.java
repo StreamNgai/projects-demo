@@ -112,6 +112,10 @@ public class WaveView extends GLSurfaceView implements GLSurfaceView.Renderer {
 
     public void doEmptyAnim() {
         mAction = Action.Unknown;
+
+        SpreadPoints.getInstance().cacheDataPoints(getContext());
+        WavePoints.getInstance().cacheDataPoints(getContext());
+
     }
 
     public void doLoadingAnim() {

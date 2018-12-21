@@ -11,6 +11,7 @@ import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
 import dev.whl.openglwidget.DigitHelper;
+import dev.whl.openglwidget.FileCache;
 import dev.whl.openglwidget.Shape;
 
 
@@ -54,7 +55,17 @@ public class Spread extends Shape {
         mLineName = name;
         aLeftRightDigit = DigitHelper.createRoundDigit(0.0f, 1.0f, 0.1f);
         bUpDownDigit = DigitHelper.createRoundDigit(-0.6f, 0.6f, 0.05f);
-        mSpreadPoints = SpreadPoints.getInstance();
+
+        FileCache speradP = FileCache.get(view.getContext(), "speradpoints");
+        mSpreadPoints = (SpreadPoints) speradP.getAsObject("points");
+        if (mSpreadPoints != null) {
+
+            Log.d("FileCache", "read cache !");
+        } else {
+            mSpreadPoints = SpreadPoints.getInstance();
+            Log.d("FileCache", "getInstance !");
+        }
+
         Log.d(TAG, "Spread() ! " + mLineName);
     }
 
@@ -95,16 +106,16 @@ public class Spread extends Shape {
         mVertexSrc = mSpreadPoints.getLinePoints(aLeftRightMove, bUpDownMove);
         if (mVertexSrc != null && mVertexSrc.length > 0) {
             mVertexBuffer = asFloatBuffer(mVertexSrc);
+            Log.d("FileCache", "Spread(" + mLineName + ") VertexSrc get cache !");
         } else {
             mSpreadPoints.putLinePoints(aLeftRightMove, bUpDownMove);
             mVertexSrc = mSpreadPoints.getLinePoints(aLeftRightMove, bUpDownMove);
             mVertexBuffer = asFloatBuffer(mVertexSrc);
+            Log.d("FileCache", "Spread(" + mLineName + ") new VertexSrc !");
         }
 
-        mColorBuffer = mSpreadPoints.getColorBuffer(mLineName);
         if (mColorBuffer == null) {
-            mSpreadPoints.createColorBuffer(mLineName);
-            mColorBuffer = mSpreadPoints.getColorBuffer(mLineName);
+            mColorBuffer = mSpreadPoints.createColorBuffer(mLineName);
         }
     }
 
