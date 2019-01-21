@@ -7,7 +7,6 @@
     android:layout_height="match_parent"
     tools:context="dev.weihl.amazing.business.main.MainActivity">
 
-
     <android.support.v4.view.ViewPager
         android:id="@+id/viewPager"
         android:layout_width="match_parent"
@@ -27,34 +26,36 @@
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
             android:text="@string/app_name"
+            android:visibility="gone"
             android:textColor="@android:color/white"
             android:textSize="16sp"
             android:typeface="serif"/>
 
+        <android.support.design.widget.TabLayout
+            android:id="@+id/tabLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:tabTextAppearance="@style/Toolbar.TabText"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_alignParentBottom="true"
+            android:background="@color/colorBackground"/>
     </RelativeLayout>
 
     <LinearLayout
         android:id="@+id/bottomBar"
-        android:layout_width="match_parent"
-        android:layout_height="65dp"
-        android:layout_alignParentBottom="true"
-        android:background="#d9f7f7f7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="20dp"
+        android:paddingTop="6dp"
+        android:paddingBottom="6dp"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="6dp"
+        android:layout_below="@id/bar"
+        android:background="@drawable/bg_main_accinfo"
         android:orientation="horizontal">
-
-        <android.support.design.widget.TabLayout
-            android:id="@+id/tabLayout"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            app:tabTextAppearance="@style/Toolbar.TabText"/>
-
-        <View
-            android:layout_width="0.5dp"
-            android:layout_height="23dp"
-            android:layout_gravity="center_vertical"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            android:background="#7b868585"/>
 
         <Button
             android:id="@+id/favorite"

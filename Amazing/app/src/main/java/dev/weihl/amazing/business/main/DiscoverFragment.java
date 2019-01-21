@@ -1,5 +1,6 @@
 package dev.weihl.amazing.business.main;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Point;
@@ -10,6 +11,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.text.TextUtils;
+import android.util.Log;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -50,18 +52,34 @@ public class DiscoverFragment extends Fragment implements MainContract.DiscoverV
     SwipeRefreshLayout mSwipeRefreshLayout;
     Unbinder unbinder;
 
+    int mPosition;
     DiscoverTab mTab;
     DiscoverAdapter mAdapter;
     MainContract.DiscoverPresenter mPresenter;
+    CallBack mCallBack;
+
+    public interface CallBack {
+        void onScrolled(RecyclerView recyclerView, int dx, int dy);
+
+        void onScrollStateChanged(RecyclerView recyclerView, int newState);
+
+        void onDetachDiscoverFragment(int position);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+    }
 
     public DiscoverFragment() {
         super();
     }
 
-    public static DiscoverFragment newInstance(DiscoverTab tab) {
+    public static DiscoverFragment newInstance(DiscoverTab tab, int position) {
         DiscoverFragment fragment = new DiscoverFragment();
         Bundle args = new Bundle();
         args.putParcelable("Tab", tab);
+        args.putInt("Position", position);
         fragment.setArguments(args);
         return fragment;
     }
@@ -71,6 +89,7 @@ public class DiscoverFragment extends Fragment implements MainContract.DiscoverV
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             mTab = getArguments().getParcelable("Tab");
+            mPosition = getArguments().getInt("Position");
         }
         new DiscoverPresenter(this).start();
     }
@@ -107,11 +126,18 @@ public class DiscoverFragment extends Fragment implements MainContract.DiscoverV
                         && !recyclerView.canScrollVertically(1)) { // 停止滑动
                     loadLocal();
                 }
+                if (mCallBack != null) {
+                    mCallBack.onScrollStateChanged(recyclerView, newState);
+                }
             }
 
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                if (mCallBack != null) {
+                    mCallBack.onScrolled(recyclerView, dx, dy);
+                }
             }
+
         });
     }
 
@@ -176,11 +202,17 @@ public class DiscoverFragment extends Fragment implements MainContract.DiscoverV
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+        if (context instanceof CallBack) {
+            mCallBack = (CallBack) context;
+        }
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
+        if(mCallBack != null){
+            mCallBack.onDetachDiscoverFragment(mPosition);
+        }
     }
 
     @Override
@@ -227,7 +259,7 @@ public class DiscoverFragment extends Fragment implements MainContract.DiscoverV
         int mBarHeight;
 
         DiscoverAdapter() {
-            mBarHeight = DensityUtil.dip2px(getActivity(), 28);
+            mBarHeight = DensityUtil.dpToPx(getActivity(), 28);
             mDiscoverList = new ArrayList<>();
             mItemLayoutParams = new SparseArray<>();
         }
@@ -323,7 +355,7 @@ public class DiscoverFragment extends Fragment implements MainContract.DiscoverV
             @Override
             public void onClick(View v) {
                 Discover discover = (Discover) v.getTag(R.id.obj);
-                if(discover != null){
+                if (discover != null) {
                     Intent intent = new Intent(getActivity(), AlbumActivity.class);
                     intent.putExtra(Enum.IntentKey.Imgs, discover.getDetails());
                     intent.putExtra(Enum.IntentKey.DiscoverId, discover.getId());

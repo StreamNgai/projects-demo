@@ -100,7 +100,7 @@ public class AmazingRepository implements AmazingDataSource {
             BmobUser bmobUser = BmobUser.getCurrentUser();
             if (bmobUser != null) {
                 if (Logc.allowPrints()) {
-                    Logc.d(Tags.Login, "User Local Account Result ! ObjectId = " + bmobUser.getObjectId());
+                    Logc.d(Tags.Login, "IUser Local Account Result ! ObjectId = " + bmobUser.getObjectId());
                 }
                 callBack.onResult(bmobUser);
             } else {

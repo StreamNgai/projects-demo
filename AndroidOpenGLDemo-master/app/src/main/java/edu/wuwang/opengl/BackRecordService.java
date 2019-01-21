@@ -70,8 +70,6 @@ public class BackRecordService extends Service {
         onLog("onCreate !");
         openCamera();
         startBackgroundThread();
-
-
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -115,6 +113,8 @@ public class BackRecordService extends Service {
                 onLog("Exception = " + e.getMessage());
             } catch (InterruptedException e) {
                 onLog("Exception  Interrupted while trying to lock camera opening.");
+            } catch (Exception e) {
+                onLog(e.getMessage());
             }
         } else {
             onLog("No Permissions !" + VIDEO_PERMISSIONS.toString());
@@ -362,8 +362,8 @@ public class BackRecordService extends Service {
                 mMediaRecorder.release();
                 mMediaRecorder = null;
             }
-        } catch (InterruptedException e) {
-            throw new RuntimeException("Interrupted while trying to lock camera closing.");
+        } catch (Exception e) {
+            onLog("Interrupted while trying to lock camera closing.");
         } finally {
             mCameraOpenCloseLock.release();
         }

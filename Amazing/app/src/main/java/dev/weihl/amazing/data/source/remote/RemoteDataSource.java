@@ -163,7 +163,7 @@ public class RemoteDataSource implements AmazingDataSource {
                 @Override
                 public void done(BmobUser bmobUser, BmobException e) {
                     if (Logc.allowPrints()) {
-                        Logc.d(Tags.Login, "User Remote Account "
+                        Logc.d(Tags.Login, "IUser Remote Account "
                                 + (bmobUser == null ? "Result = Failure ! ErrorMsg = "
                                 + (e == null ? " Null" : e.getMessage()) : "Result ! ObjectId = " + bmobUser.getObjectId()));
                     }
@@ -186,7 +186,7 @@ public class RemoteDataSource implements AmazingDataSource {
                         userInfo = list.get(0);
                     }
                     if (Logc.allowPrints()) {
-                        Logc.d(Tags.UserInfo, "UserInfo Remote Load By User ! "
+                        Logc.d(Tags.UserInfo, "UserInfo Remote Load By IUser ! "
                                 + (userInfo == null ? "Result = Failure ! ErrorMsg = "
                                 + (e == null ? " Null" : e.getMessage()) : "Result = " + userInfo.toString()));
                     }

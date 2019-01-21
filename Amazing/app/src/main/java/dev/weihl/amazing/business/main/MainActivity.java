@@ -1,5 +1,6 @@
 package dev.weihl.amazing.business.main;
 
+import android.animation.ValueAnimator;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -8,6 +9,8 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.widget.RecyclerView;
+import android.util.SparseIntArray;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
@@ -31,9 +34,12 @@ import dev.weihl.amazing.business.account.LoginActivity;
 import dev.weihl.amazing.business.favorite.FavoriteActivity;
 import dev.weihl.amazing.data.bean.DiscoverTab;
 import dev.weihl.amazing.util.AnimUtil;
+import dev.weihl.amazing.util.DensityUtil;
+import dev.weihl.amazing.util.LayoutUtil;
 
 
-public class MainActivity extends BaseActivity implements MainContract.View, GroupFragment.OnTabSelectListener {
+public class MainActivity extends BaseActivity
+        implements MainContract.View, GroupFragment.OnTabSelectListener, DiscoverFragment.CallBack {
 
     @BindView(R.id.bar)
     RelativeLayout mBar;
@@ -53,7 +59,10 @@ public class MainActivity extends BaseActivity implements MainContract.View, Gro
     final int LOGIN_REQUESTCODE = 1000;
     MainContract.Presenter mPresenter;
     GestureDetector mDetector;
-    int mBottomBarHeight;
+    int tempBarHeight = -1;
+    int maxBarHeight = -1; // 最大高度
+    int minBarHeight = -1; // 最小高度
+    SparseIntArray mFragmentBarHeights = new SparseIntArray();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,10 +73,6 @@ public class MainActivity extends BaseActivity implements MainContract.View, Gro
         onDetector();
         initViewPager();
         initTabLayout();
-        mBottomBarHeight = mBottomBar.getMeasuredHeight();
-        if (Logc.allowPrints()) {
-            Logc.d(Tags.MainAction, "BottomBarHeight = " + mBottomBarHeight);
-        }
     }
 
     @Override
@@ -99,22 +104,105 @@ public class MainActivity extends BaseActivity implements MainContract.View, Gro
                 if (Logc.allowPrints()) {
                     Logc.d(Tags.MainAction, "distanceX = " + distanceX + " ; distanceY = " + distanceY);
                 }
-                if (distanceY > 0) {
-                    if (mBottomBar.getTag() == null) {
-                        // 隐藏底部Bar
-                        mBottomBar.setTag(true);
-                        AnimUtil.alphaView(mBottomBar, 1.0f, 0, 500);
-                    }
-                } else {
-                    if (mBottomBar.getTag() != null) {
-                        // 显示
-                        mBottomBar.setTag(null);
-                        AnimUtil.alphaView(mBottomBar, 0, 1.0f, 500);
-                    }
-                }
                 return super.onScroll(e1, e2, distanceX, distanceY);
             }
         });
+    }
+
+    private void onAnimBar(int distanceY) {
+        if (tempBarHeight == -1) {
+            minBarHeight = tempBarHeight = DensityUtil.dpToPx(getActivity(), 29);
+            maxBarHeight = DensityUtil.dpToPx(getActivity(), 56);
+        }
+        tempBarHeight += distanceY;
+        if (tempBarHeight < minBarHeight) {
+            tempBarHeight = minBarHeight;
+        }
+        if (tempBarHeight > maxBarHeight) {
+            tempBarHeight = maxBarHeight;
+        }
+        mFragmentBarHeights.put(mViewPager.getCurrentItem(), tempBarHeight);
+        mUIHandler.post(onAnimBarRunnable);
+    }
+
+    private Runnable onAnimBarRunnable = new Runnable() {
+        @Override
+        public void run() {
+            LayoutUtil.setViewWidthHeight(mBar, mBar.getWidth(), tempBarHeight);
+            animBottomBar();
+        }
+    };
+
+    private void animBottomBar() {
+        mUIHandler.removeCallbacks(animBottomBarRunnable);
+        mUIHandler.post(animBottomBarRunnable);
+    }
+
+    private Runnable animBottomBarRunnable = new Runnable() {
+        @Override
+        public void run() {
+            if (tempBarHeight == minBarHeight) {
+                if (mBottomBar.getVisibility() == View.GONE) {
+                    AnimUtil.translateView(mBottomBar, mBottomBar.getX(), 0,
+                            0, 0, 300, true, null);
+                    mBottomBar.setVisibility(View.VISIBLE);
+                }
+            } else if (tempBarHeight == maxBarHeight) {
+                if (mBottomBar.getVisibility() == View.VISIBLE) {
+                    AnimUtil.translateView(mBottomBar, 0, mBottomBar.getX(),
+                            0, 0, 300, true, null);
+                    mBottomBar.setVisibility(View.GONE);
+                }
+            }
+        }
+    };
+
+    private boolean mBarShrinking = false;
+    private boolean mMagnify = false;
+
+    private void onValueAnimBar() {
+        int fBarHeight = mFragmentBarHeights.get(mViewPager.getCurrentItem());
+        if (fBarHeight < minBarHeight) {
+            fBarHeight = minBarHeight;
+            mFragmentBarHeights.put(mViewPager.getCurrentItem(), fBarHeight);
+        }
+        if (fBarHeight > maxBarHeight) {
+            fBarHeight = maxBarHeight;
+            mFragmentBarHeights.put(mViewPager.getCurrentItem(), fBarHeight);
+        }
+        if (tempBarHeight > fBarHeight) {
+            if (!mBarShrinking) {
+                ValueAnimator valueAnimator = ValueAnimator.ofInt(tempBarHeight, fBarHeight);
+                valueAnimator.setDuration(500);
+                final int finalFBarHeight = fBarHeight;
+                valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                    @Override
+                    public void onAnimationUpdate(ValueAnimator animation) {
+                        tempBarHeight = (int) animation.getAnimatedValue();
+                        LayoutUtil.setViewWidthHeight(mBar, mBar.getWidth(), tempBarHeight);
+                        mBarShrinking = !(tempBarHeight == finalFBarHeight);
+                        animBottomBar();
+                    }
+                });
+                valueAnimator.start();
+            }
+        } else {
+            if (!mMagnify) {
+                ValueAnimator valueAnimator = ValueAnimator.ofInt(tempBarHeight, fBarHeight);
+                valueAnimator.setDuration(500);
+                final int finalFBarHeight1 = fBarHeight;
+                valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                    @Override
+                    public void onAnimationUpdate(ValueAnimator animation) {
+                        tempBarHeight = (int) animation.getAnimatedValue();
+                        LayoutUtil.setViewWidthHeight(mBar, mBar.getWidth(), tempBarHeight);
+                        mMagnify = !(tempBarHeight == finalFBarHeight1);
+                        animBottomBar();
+                    }
+                });
+                valueAnimator.start();
+            }
+        }
     }
 
     private void initTabLayout() {
@@ -122,8 +210,8 @@ public class MainActivity extends BaseActivity implements MainContract.View, Gro
         mTabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
         mTabLayout.setTabGravity(TabLayout.GRAVITY_CENTER);
         mTabLayout.setSelectedTabIndicatorHeight(0);
-        mTabLayout.setTabTextColors(Color.parseColor("#868585"), Color.parseColor("#117bf2"));
-        mTabLayout.setSelectedTabIndicatorColor(getResources().getColor(R.color.colorPrimary));
+        mTabLayout.setTabTextColors(Color.parseColor("#8BFFFFFF"), Color.parseColor("#FFFFFF"));
+        mTabLayout.setSelectedTabIndicatorColor(Color.parseColor("#FFFFFF"));
     }
 
     private void initViewPager() {
@@ -143,12 +231,28 @@ public class MainActivity extends BaseActivity implements MainContract.View, Gro
             @Override
             public Fragment getItem(int position) {
                 Logc.d("MainAdapter", "getItem position = " + position);
-                return DiscoverFragment.newInstance(Session.tabList.get(position));
+                return DiscoverFragment.newInstance(Session.tabList.get(position), position);
             }
 
             @Override
             public CharSequence getPageTitle(int position) {
                 return Session.tabList.get(position).getName();
+            }
+        });
+        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                onValueAnimBar();
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
             }
         });
     }
@@ -206,4 +310,23 @@ public class MainActivity extends BaseActivity implements MainContract.View, Gro
         }
     }
 
+    @Override
+    public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+        if (Logc.allowPrints()) {
+            Logc.d(Tags.Discover, "onAnimBar dy = " + dy);
+        }
+        onAnimBar(dy);
+    }
+
+    @Override
+    public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+
+    }
+
+    @Override
+    public void onDetachDiscoverFragment(int position) {
+        if (Logc.allowPrints()) {
+            Logc.d(Tags.Discover, "onAttachDiscoverFragment position = " + position);
+        }
+    }
 }
