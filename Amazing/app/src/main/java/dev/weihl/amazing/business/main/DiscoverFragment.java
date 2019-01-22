@@ -114,11 +114,12 @@ public class DiscoverFragment extends Fragment implements MainContract.DiscoverV
     private void initRecyclerView() {
         StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(2,
                 StaggeredGridLayoutManager.VERTICAL);
-        layoutManager.setGapStrategy(2);
+        // 使item停止滑动后，不变化位置
+//        layoutManager.setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_NONE);
         mRecyclerView.setLayoutManager(layoutManager);
         mAdapter = new DiscoverAdapter();
         mRecyclerView.setAdapter(mAdapter);
-        mRecyclerView.addItemDecoration(new SpacesItemDecoration(16));
+//        mRecyclerView.addItemDecoration(new SpacesItemDecoration(16));
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
@@ -249,8 +250,6 @@ public class DiscoverFragment extends Fragment implements MainContract.DiscoverV
         mSwipeRefreshLayout.setRefreshing(false);
     }
 
-
-    // ----------------
     class DiscoverAdapter extends RecyclerView.Adapter<DiscoverAdapter.ViewHolder> {
 
         List<Discover> mDiscoverList;
@@ -259,7 +258,7 @@ public class DiscoverFragment extends Fragment implements MainContract.DiscoverV
         int mBarHeight;
 
         DiscoverAdapter() {
-            mBarHeight = DensityUtil.dpToPx(getActivity(), 28);
+            mBarHeight = DensityUtil.dpToPx(getActivity(), 29);
             mDiscoverList = new ArrayList<>();
             mItemLayoutParams = new SparseArray<>();
         }
@@ -299,7 +298,7 @@ public class DiscoverFragment extends Fragment implements MainContract.DiscoverV
                     holder.itemView.setLayoutParams(itemRlp_);
                 }
 
-                holder.itemTx.setText(discover.getTitle() + "  " + discover.getId());
+                holder.itemTx.setText(discover.getTitle());
                 Imginfo imginfo = ImginfoUtil.parsingThumb(discover.thumb);
                 Glide.with(getActivity())
                         .load(ImginfoUtil.createGlideUrl(imginfo))
@@ -317,10 +316,11 @@ public class DiscoverFragment extends Fragment implements MainContract.DiscoverV
             if (mRecyItemWidth == -1) {
                 Point mPoint = new Point();
                 getActivity().getWindowManager().getDefaultDisplay().getRealSize(mPoint);
-                mRecyItemWidth = (mPoint.x - 16) / 2;
+                mRecyItemWidth = (mPoint.x) / 2;
             }
 
-            RelativeLayout.LayoutParams vlp = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            RelativeLayout.LayoutParams vlp = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT);
             vlp.width = mRecyItemWidth;
             vlp.height = (int) (350 + Math.random() * 400);
             Logc.d("DiscoverAdapter", "height = " + vlp.height + " ; width = " + vlp.width);

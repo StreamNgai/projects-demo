@@ -11,10 +11,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.RecyclerView;
 import android.util.SparseIntArray;
-import android.view.GestureDetector;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.animation.LinearInterpolator;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -27,19 +24,20 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import dev.weihl.amazing.Logc;
 import dev.weihl.amazing.R;
-import dev.weihl.amazing.Session;
 import dev.weihl.amazing.Tags;
 import dev.weihl.amazing.business.BaseActivity;
+import dev.weihl.amazing.business.account.AccountActivity;
 import dev.weihl.amazing.business.account.LoginActivity;
 import dev.weihl.amazing.business.favorite.FavoriteActivity;
 import dev.weihl.amazing.data.bean.DiscoverTab;
+import dev.weihl.amazing.manage.User;
 import dev.weihl.amazing.util.AnimUtil;
 import dev.weihl.amazing.util.DensityUtil;
 import dev.weihl.amazing.util.LayoutUtil;
 
 
 public class MainActivity extends BaseActivity
-        implements MainContract.View, GroupFragment.OnTabSelectListener, DiscoverFragment.CallBack {
+        implements MainContract.View, DiscoverFragment.CallBack {
 
     @BindView(R.id.bar)
     RelativeLayout mBar;
@@ -55,14 +53,16 @@ public class MainActivity extends BaseActivity
     ViewPager mViewPager;
     @BindView(R.id.tabLayout)
     TabLayout mTabLayout;
+    @BindView(R.id.emptyLayout)
+    RelativeLayout emptyLayout;
 
     final int LOGIN_REQUESTCODE = 1000;
     MainContract.Presenter mPresenter;
-    GestureDetector mDetector;
     int tempBarHeight = -1;
     int maxBarHeight = -1; // 最大高度
     int minBarHeight = -1; // 最小高度
     SparseIntArray mFragmentBarHeights = new SparseIntArray();
+    List<DiscoverTab> mTabs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,43 +70,13 @@ public class MainActivity extends BaseActivity
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         new MainPresenter(this).start();
-        onDetector();
-        initViewPager();
-        initTabLayout();
+        initAccount();
     }
 
-    @Override
-    public boolean dispatchTouchEvent(MotionEvent ev) {
-        mDetector.onTouchEvent(ev);
-        return super.dispatchTouchEvent(ev);
-    }
-
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        return super.onTouchEvent(event);
-    }
-
-    private void onDetector() {
-        mDetector = new GestureDetector(this, new GestureDetector.SimpleOnGestureListener() {
-
-            @Override
-            public void onShowPress(MotionEvent e) {
-                super.onShowPress(e);
-            }
-
-            @Override
-            public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-                return super.onFling(e1, e2, velocityX, velocityY);
-            }
-
-            @Override
-            public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
-                if (Logc.allowPrints()) {
-                    Logc.d(Tags.MainAction, "distanceX = " + distanceX + " ; distanceY = " + distanceY);
-                }
-                return super.onScroll(e1, e2, distanceX, distanceY);
-            }
-        });
+    private void initAccount() {
+        if (User.getInstance().isLogin()) {
+            mAccount.setBackgroundResource(R.drawable.ic_account_press);
+        }
     }
 
     private void onAnimBar(int distanceY) {
@@ -225,18 +195,18 @@ public class MainActivity extends BaseActivity
 
             @Override
             public int getCount() {
-                return Session.tabList.size();
+                return mTabs.size();
             }
 
             @Override
             public Fragment getItem(int position) {
                 Logc.d("MainAdapter", "getItem position = " + position);
-                return DiscoverFragment.newInstance(Session.tabList.get(position), position);
+                return DiscoverFragment.newInstance(mTabs.get(position), position);
             }
 
             @Override
             public CharSequence getPageTitle(int position) {
-                return Session.tabList.get(position).getName();
+                return mTabs.get(position).getName();
             }
         });
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -265,7 +235,11 @@ public class MainActivity extends BaseActivity
     public void onClickView(View view) {
         switch (view.getId()) {
             case R.id.account:
-                startActivityForResult(new Intent(this, LoginActivity.class), LOGIN_REQUESTCODE);
+                if (User.getInstance().isLogin()) {
+                    startActivity(new Intent(this, AccountActivity.class));
+                } else {
+                    startActivityForResult(new Intent(this, LoginActivity.class), LOGIN_REQUESTCODE);
+                }
                 break;
             case R.id.favorite:
                 startActivity(new Intent(this, FavoriteActivity.class));
@@ -304,13 +278,6 @@ public class MainActivity extends BaseActivity
     }
 
     @Override
-    public void onTabResult(DiscoverTab tab) {
-        if (Logc.allowPrints()) {
-            Logc.d(Tags.GroupTab, tab == null ? "tab is null !" : tab.toString());
-        }
-    }
-
-    @Override
     public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
         if (Logc.allowPrints()) {
             Logc.d(Tags.Discover, "onAnimBar dy = " + dy);
@@ -329,4 +296,17 @@ public class MainActivity extends BaseActivity
             Logc.d(Tags.Discover, "onAttachDiscoverFragment position = " + position);
         }
     }
+
+    @Override
+    public void displayDiscoverTabs(List<DiscoverTab> tabs) {
+        mTabs = tabs;
+        if (mTabs != null && !mTabs.isEmpty()) {
+            emptyLayout.setVisibility(View.GONE);
+            initViewPager();
+            initTabLayout();
+        } else {
+            emptyLayout.setVisibility(View.VISIBLE);
+        }
+    }
+
 }

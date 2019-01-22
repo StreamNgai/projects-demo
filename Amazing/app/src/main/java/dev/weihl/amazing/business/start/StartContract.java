@@ -16,9 +16,7 @@ public interface StartContract {
     }
 
     interface Presenter extends BasePresenter {
-        boolean isReady();
 
-        void startMain();
     }
 
 

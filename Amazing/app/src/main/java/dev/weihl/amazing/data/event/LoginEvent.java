@@ -7,9 +7,9 @@ package dev.weihl.amazing.data.event;
  */
 public class LoginEvent {
 
-    public boolean mLoginResult;
+    boolean isLoaded;
 
-    public LoginEvent(boolean result) {
-        this.mLoginResult = result;
+    public LoginEvent(boolean isLoaded) {
+        this.isLoaded = isLoaded;
     }
 }

@@ -53,6 +53,7 @@ public class AlbumActivity extends BaseActivity implements AlbumContract.View {
     DetectorAction mDetectorAction;
     ImgsAdapter mImgsAdapter;
     Favorite mFavorite;
+    private String tSplit = " · ";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,7 +110,7 @@ public class AlbumActivity extends BaseActivity implements AlbumContract.View {
 
             @Override
             public void onPageSelected(int position) {
-                mPagerText.setText(++position + "/" + mImgsAdapter.getCount());
+                mPagerText.setText(++position + tSplit + mImgsAdapter.getCount());
             }
 
             @Override
@@ -221,7 +222,7 @@ public class AlbumActivity extends BaseActivity implements AlbumContract.View {
             mImgs.addAll(imginfos);
             mImgsAdapter = new ImgsAdapter(getSupportFragmentManager());
             mViewPager.setAdapter(mImgsAdapter);
-            mPagerText.setText("1/" + mImgsAdapter.getCount());
+            mPagerText.setText("1" + tSplit + mImgsAdapter.getCount());
         }
     }
 

@@ -13,6 +13,7 @@ import dev.weihl.amazing.data.bean.DiscoverTab;
 import dev.weihl.amazing.data.bean.UserInfo;
 import dev.weihl.amazing.data.source.AmazingDataSource;
 import dev.weihl.amazing.data.source.AmazingRepository;
+import dev.weihl.amazing.manage.User;
 
 /**
  * @author Ngai
@@ -23,67 +24,25 @@ public class StartPresenter implements StartContract.Presenter {
 
     StartContract.View mStartView;
     AmazingDataSource mRepository;
-    BmobUser mUser;
-    boolean isReadyUserInfo;
-    boolean isReadyDiscoverTab;
 
-    public StartPresenter(StartContract.View startView) {
+    StartPresenter(StartContract.View startView) {
         mStartView = startView;
         mRepository = AmazingRepository.getInstance();
     }
 
     @Override
     public void start() {
-//        login();// 可以省了
-        mUser = BmobUser.getCurrentUser();
-        loadUserInfo();
+        User.getInstance().doLogin();
         syncDiscoverTab();
     }
 
     private void syncDiscoverTab() {
-        isReadyDiscoverTab = false;
-        mRepository.syncDiscoverTab(new AmazingDataSource.DiscoverTabCallBack() {
-            @Override
-            public void onResult(List<DiscoverTab> tabList) {
-                Session.tabList = tabList;
-                isReadyDiscoverTab = true;
-                startMain();
-            }
-        });
+        mRepository.syncDiscoverTab(null);
     }
-
-    private void loadUserInfo() {
-        if (mUser != null && !TextUtils.isEmpty(mUser.getObjectId())) {
-            isReadyUserInfo = false;
-            mRepository.loadUserInfo(mUser, new AmazingDataSource.UserInfoCallBack() {
-                @Override
-                public void onResult(UserInfo userInfo) {
-                    Session.userInfo = userInfo;
-                    isReadyUserInfo = true;
-                    startMain();
-                }
-            });
-        } else {
-            isReadyUserInfo = true;
-        }
-    }
-
 
     @Override
     public void stop() {
 
     }
-
-    @Override
-    public boolean isReady() {
-        return isReadyUserInfo && isReadyDiscoverTab;
-    }
-
-    @Override
-    public void startMain() {
-        if (isReady()) {
-            mStartView.getActivity().startActivity(new Intent(mStartView.getActivity(), MainActivity.class));
-            mStartView.getActivity().finish();
-        }
-    }
+ 
 }

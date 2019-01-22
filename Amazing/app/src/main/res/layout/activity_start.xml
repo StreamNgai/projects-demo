@@ -17,7 +17,7 @@
         android:gravity="end"
         android:text="@string/copy_right"
         android:textColor="@android:color/white"
-        android:textSize="17sp"/>
+        android:textSize="15sp"/>
 
     <ImageView
         android:id="@+id/imageView"

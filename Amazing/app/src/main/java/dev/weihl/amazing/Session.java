@@ -11,8 +11,4 @@ import dev.weihl.amazing.data.bean.UserInfo;
  * Des:
  */
 public class Session {
-
-    public static List<DiscoverTab> tabList;
-
-    public static UserInfo userInfo;
 }
