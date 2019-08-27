@@ -13,8 +13,10 @@
     <string name="album_group">专辑分类</string>
     <string name="choose">选择</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_account">AccountActivity</string>
+    <string name="app_introduction">唯色影，唯摄影\n海量美媚专辑图片，任君选看\n分享大师对艺术与生活觉悟的高质量摄影专辑</string>
+
+    <string name="action_settings">Settings</string>
 
 
 </resources>

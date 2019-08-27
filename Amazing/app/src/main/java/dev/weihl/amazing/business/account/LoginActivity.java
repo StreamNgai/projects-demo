@@ -2,10 +2,12 @@ package dev.weihl.amazing.business.account;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.AppCompatEditText;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 
@@ -16,6 +18,7 @@ import cn.bmob.v3.BmobUser;
 import dev.weihl.amazing.MainApplication;
 import dev.weihl.amazing.R;
 import dev.weihl.amazing.business.BaseActivity;
+import dev.weihl.amazing.manage.User;
 
 public class LoginActivity extends BaseActivity implements AccountContract.View {
 
@@ -34,6 +37,11 @@ public class LoginActivity extends BaseActivity implements AccountContract.View 
         ButterKnife.bind(this);
 
         new AccountPresenter(this).start();
+
+        if (User.getInstance().isLogin()) {
+            mEmailEdit.setText(User.getInstance().getEmail());
+        }
+
     }
 
     @OnClick({R.id.close, R.id.login, R.id.forgetPsw, R.id.userRegister})
@@ -65,8 +73,8 @@ public class LoginActivity extends BaseActivity implements AccountContract.View 
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(resultCode == RESULT_OK){
-            finish();
+        if (resultCode == RESULT_OK) {
+            loginResult(BmobUser.getCurrentUser());
         }
     }
 
@@ -84,13 +92,17 @@ public class LoginActivity extends BaseActivity implements AccountContract.View 
     public void loginResult(BmobUser user) {
         mProgressBar.setVisibility(View.GONE);
         if (user != null) {
-            finish();
-        } else {
-            MaterialDialog.Builder dialogBuilder = new MaterialDialog.Builder(MainApplication.getTopActivity())
-                    .title("登录失败 !")
-                    .content("账号或密码错误 !")
-                    .positiveText("了 解 !");
+            User.getInstance().doLogin();
+            if (User.getInstance().isLogin()) {
+                finish();
+                return;
+            }
         }
+        MaterialDialog.Builder dialogBuilder = new MaterialDialog.Builder(MainApplication.getTopActivity())
+                .title("登录失败 !")
+                .content("账号或密码错误 !")
+                .positiveText("了 解 !");
+        dialogBuilder.show();
     }
 
     @Override

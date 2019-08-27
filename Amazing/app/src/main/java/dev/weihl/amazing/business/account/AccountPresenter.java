@@ -9,6 +9,7 @@ import cn.bmob.v3.listener.UpdateListener;
 import dev.weihl.amazing.data.bean.UserInfo;
 import dev.weihl.amazing.data.source.AmazingDataSource;
 import dev.weihl.amazing.data.source.AmazingRepository;
+import dev.weihl.amazing.manage.User;
 
 /**
  * @author Ngai

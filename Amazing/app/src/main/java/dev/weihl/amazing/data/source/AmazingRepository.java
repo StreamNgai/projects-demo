@@ -16,6 +16,7 @@ import dev.weihl.amazing.data.bean.Favorite;
 import dev.weihl.amazing.data.bean.UserFeedback;
 import dev.weihl.amazing.data.bean.UserInfo;
 import dev.weihl.amazing.data.source.local.LocalDataSource;
+import dev.weihl.amazing.data.source.local.dao.DaoHelper;
 import dev.weihl.amazing.data.source.remote.RemoteDataSource;
 
 /**
@@ -29,12 +30,17 @@ public class AmazingRepository implements AmazingDataSource {
     private RemoteDataSource mRemoteDataSource;
     private Context mContext;
     private HashMap<String, Integer> mIdMaxSet;
+    private DataCache mDataCache;
 
+    private class DataCache {
+        List<DiscoverTab> cDiscoverTabs;
+    }
 
     private AmazingRepository() {
         mLocalDataSource = LocalDataSource.getInstance();
         mRemoteDataSource = RemoteDataSource.getInstance();
         mContext = MainApplication.getContext();
+        mDataCache = new DataCache();
     }
 
     public static AmazingRepository getInstance() {
@@ -67,20 +73,35 @@ public class AmazingRepository implements AmazingDataSource {
     }
 
     @Override
-    public void syncDiscoverTab(DiscoverTabCallBack callBack) {
+    public void syncDiscoverTab(final DiscoverTabCallBack callBack) {
 
-        if (mLocalDataSource.hasLocalDiscoverTab()) {
-            if (Logc.allowPrints()) {
-                Logc.d(Tags.DiscoverTab, "Sync Local !");
+        if (callBack != null) {
+            if (mDataCache.cDiscoverTabs != null
+                    && !mDataCache.cDiscoverTabs.isEmpty()) {
+                callBack.onResult(mDataCache.cDiscoverTabs);
+            } else if (mRemoteDataSource.needSyncDiscoverTab()) {
+                if (Logc.allowPrints()) {
+                    Logc.d(Tags.DiscoverTab, "Sync Remote !");
+                }
+                mRemoteDataSource.syncDiscoverTab(new DiscoverTabCallBack() {
+                    @Override
+                    public void onResult(List<DiscoverTab> tabList) {
+                        mDataCache.cDiscoverTabs = tabList;
+                        callBack.onResult(mDataCache.cDiscoverTabs);
+                    }
+                });
+            } else if (mLocalDataSource.hasLocalDiscoverTab()) {
+                if (Logc.allowPrints()) {
+                    Logc.d(Tags.DiscoverTab, "Sync Local !");
+                }
+                mLocalDataSource.syncDiscoverTab(new DiscoverTabCallBack() {
+                    @Override
+                    public void onResult(List<DiscoverTab> tabList) {
+                        mDataCache.cDiscoverTabs = tabList;
+                        callBack.onResult(mDataCache.cDiscoverTabs);
+                    }
+                });
             }
-            mLocalDataSource.syncDiscoverTab(callBack);
-        }
-
-        if (mRemoteDataSource.needSyncDiscoverTab()) {
-            if (Logc.allowPrints()) {
-                Logc.d(Tags.DiscoverTab, "Sync Remote !");
-            }
-            mRemoteDataSource.syncDiscoverTab(mLocalDataSource.hasLocalDiscoverTab() ? null : callBack);
         }
     }
 
@@ -100,7 +121,7 @@ public class AmazingRepository implements AmazingDataSource {
             BmobUser bmobUser = BmobUser.getCurrentUser();
             if (bmobUser != null) {
                 if (Logc.allowPrints()) {
-                    Logc.d(Tags.Login, "User Local Account Result ! ObjectId = " + bmobUser.getObjectId());
+                    Logc.d(Tags.Login, "IUser Local Account Result ! ObjectId = " + bmobUser.getObjectId());
                 }
                 callBack.onResult(bmobUser);
             } else {
@@ -116,8 +137,15 @@ public class AmazingRepository implements AmazingDataSource {
                 @Override
                 public void onResult(UserInfo userInfo) {
                     if (userInfo == null
-                            && !TextUtils.isEmpty(user.getEmail()) && user.getEmailVerified()) {
-                        mRemoteDataSource.loadUserInfo(user, callBack);
+                            && !TextUtils.isEmpty(user.getEmail())) {
+                        mRemoteDataSource.loadUserInfo(user, new UserInfoCallBack() {
+                            @Override
+                            public void onResult(UserInfo userInfo) {
+                                DaoHelper.getDaoSession().getUserInfoDao().deleteAll();
+                                DaoHelper.getDaoSession().getUserInfoDao().insert(userInfo);
+                                callBack.onResult(userInfo);
+                            }
+                        });
                     } else {
                         callBack.onResult(userInfo);
                     }
@@ -181,8 +209,8 @@ public class AmazingRepository implements AmazingDataSource {
 
     @Override
     public void saveFavorite(Favorite favorite, AlbumContract.FavoriteCallBack callBack) {
-        if(favorite != null
-                && !TextUtils.isEmpty(favorite.getImgs())){
+        if (favorite != null
+                && !TextUtils.isEmpty(favorite.getImgs())) {
             mLocalDataSource.saveFavorite(favorite, callBack);
         }
     }

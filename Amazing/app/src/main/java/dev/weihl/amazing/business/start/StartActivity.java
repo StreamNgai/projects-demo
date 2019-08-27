@@ -2,6 +2,7 @@ package dev.weihl.amazing.business.start;
 
 import android.animation.Animator;
 import android.animation.ValueAnimator;
+import android.content.Intent;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.os.Message;
@@ -10,6 +11,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import dev.weihl.amazing.R;
 import dev.weihl.amazing.business.BaseActivity;
+import dev.weihl.amazing.business.main.MainActivity;
 import dev.weihl.amazing.widget.PathView;
 
 public class StartActivity extends BaseActivity implements StartContract.View {
@@ -46,7 +48,7 @@ public class StartActivity extends BaseActivity implements StartContract.View {
                 pathView.getPaint().setStyle(Paint.Style.FILL);
                 pathView.setText(getString(R.string.app_name));
 
-                mUIHandler.sendEmptyMessageAtTime(600,1);
+                mUIHandler.sendEmptyMessageAtTime(1000,1000);
             }
 
             @Override
@@ -68,7 +70,8 @@ public class StartActivity extends BaseActivity implements StartContract.View {
     protected void onHandleMessage(Message msg) {
         switch (msg.what) {
             case 1000:
-                mPresenter.startMain();
+                startActivity(new Intent(this, MainActivity.class));
+                finish();
                 break;
         }
     }

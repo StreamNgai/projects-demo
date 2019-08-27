@@ -32,7 +32,7 @@ public class MainPresenter implements MainContract.Presenter {
     MainContract.View mMainView;
     AmazingDataSource mRepository;
 
-    public MainPresenter(MainContract.View mainView) {
+    MainPresenter(MainContract.View mainView) {
         this.mMainView = mainView;
         mMainView.setPresenter(this);
         mRepository = AmazingRepository.getInstance();
@@ -43,7 +43,18 @@ public class MainPresenter implements MainContract.Presenter {
         EventBus.getDefault().register(this);
         NetworkReceiver.registerN(mMainView.getActivity());// 网络状态权限
         AppExecutors.executeDiskIO(new UpgradeRunnable());// 升级
-//        login();
+
+        loadDiscoverTabs();
+
+    }
+
+    private void loadDiscoverTabs() {
+        mRepository.syncDiscoverTab(new AmazingDataSource.DiscoverTabCallBack() {
+            @Override
+            public void onResult(List<DiscoverTab> tabList) {
+                mMainView.displayDiscoverTabs(tabList);
+            }
+        });
     }
 
     private void login() {

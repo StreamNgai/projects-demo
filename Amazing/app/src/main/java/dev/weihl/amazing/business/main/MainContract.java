@@ -15,6 +15,8 @@ public interface MainContract {
 
     interface View extends BaseView<Presenter> {
 
+       void displayDiscoverTabs(List<DiscoverTab> tabs);
+
     }
 
     interface Presenter extends BasePresenter {

@@ -18,8 +18,6 @@ import dev.weihl.amazing.data.bean.UserInfo;
  */
 public interface AmazingDataSource {
 
-
-
     interface AppUpdateCallBack {
         void onResult(UpgradeApp appUpdate);
     }
