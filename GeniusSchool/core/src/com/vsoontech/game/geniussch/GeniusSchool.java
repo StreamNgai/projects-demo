@@ -10,6 +10,7 @@ import com.vsoontech.game.geniussch.data.LetterData;
 import com.vsoontech.game.geniussch.data.LetterDataLoader;
 import com.vsoontech.game.geniussch.helper.AssetHelper;
 import com.vsoontech.game.geniussch.screen.WelcomeScreen;
+import com.vsoontech.game.geniussch.speech.SpeechInterface;
 import java.util.HashMap;
 
 public class GeniusSchool extends Game {
@@ -18,6 +19,11 @@ public class GeniusSchool extends Game {
     public SpriteBatch spriteBatch;
     public AssetManager assetManager;
     public HashMap<String, String> resFields;
+    public SpeechInterface mSpeech;
+
+    public GeniusSchool(SpeechInterface speech) {
+        mSpeech = speech;
+    }
 
     @Override
     public void create() {

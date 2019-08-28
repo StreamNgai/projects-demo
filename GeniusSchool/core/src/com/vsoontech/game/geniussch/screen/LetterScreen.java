@@ -212,6 +212,7 @@ public class LetterScreen extends GsScreen {
                 } else {
                     fillActor.moveOriginXY();
                 }
+                checkAllCorrect();
             }
         }
 
@@ -229,6 +230,15 @@ public class LetterScreen extends GsScreen {
         }
     };
 
+    private void checkAllCorrect() {
+        for (LetterBlankActor bkActor : mBlankActors) {
+            if(bkActor.nonAdsorb()){
+                return;
+            }
+        }
+        // TextToSpeech
+    }
+
     private LetterBlankActor checkMoveCorrect(LetterFillActor fillActor) {
         for (LetterBlankActor bkActor : mBlankActors) {
             if (bkActor.getLetter() == fillActor.getLetter()
@@ -241,6 +251,7 @@ public class LetterScreen extends GsScreen {
                     fillActor.getWidth(), fillActor.getHeight());
                 if (bkRt.overlaps(flRt)) {
                     bkActor.setAdsorb();
+                    bkActor.setZIndex(1);
                     fillActor.removeListener(mInputListener);
                     return bkActor;
                 }
