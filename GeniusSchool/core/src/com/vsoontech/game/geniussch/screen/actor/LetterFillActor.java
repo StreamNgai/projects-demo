@@ -72,7 +72,7 @@ public class LetterFillActor extends GsActor {
     public void stopAnimation() {
         stateTime = -1;
         if (mMusic != null) {
-            mMusic.stop();
+            mMusic.pause();
         }
     }
 

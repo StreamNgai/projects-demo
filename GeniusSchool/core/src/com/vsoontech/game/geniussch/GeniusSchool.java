@@ -2,23 +2,16 @@ package com.vsoontech.game.geniussch;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.assets.AssetManager;
-import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.vsoontech.game.geniussch.data.LetterData;
-import com.vsoontech.game.geniussch.data.LetterDataLoader;
-import com.vsoontech.game.geniussch.helper.AssetHelper;
 import com.vsoontech.game.geniussch.screen.WelcomeScreen;
 import com.vsoontech.game.geniussch.speech.SpeechInterface;
-import java.util.HashMap;
 
 public class GeniusSchool extends Game {
 
     // used by all screens
     public SpriteBatch spriteBatch;
-    public AssetManager assetManager;
-    public HashMap<String, String> resFields;
+    public GsAssetManager assetManager;
     public SpeechInterface mSpeech;
 
     public GeniusSchool(SpeechInterface speech) {
@@ -31,10 +24,7 @@ public class GeniusSchool extends Game {
             Logc.d("GeniusSchool Game create !");
         }
         spriteBatch = new SpriteBatch();
-        assetManager = new AssetManager();
-        resFields = new HashMap<String, String>();
-        new AssetHelper().loadResource(Res.class, assetManager, resFields);
-
+        assetManager = new GsAssetManager();
         setScreen(new WelcomeScreen(this));
     }
 

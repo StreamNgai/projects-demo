@@ -1,4 +1,4 @@
-package com.vsoontech.game.geniussch.helper;
+package com.vsoontech.game.geniussch;
 
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
@@ -6,15 +6,21 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.vsoontech.game.geniussch.Logc;
-import com.vsoontech.game.geniussch.Res;
 import com.vsoontech.game.geniussch.data.LetterData;
 import com.vsoontech.game.geniussch.data.LetterDataLoader;
+
 import java.lang.reflect.Field;
 import java.util.HashMap;
 
-public class AssetHelper {
+/**
+ * Des:
+ * Created by Weihl
+ * 2019-08-28
+ */
+public class GsAssetManager extends AssetManager {
 
+
+    public HashMap<String, String> resFields;
 
     enum Type {
         MP3,
@@ -25,24 +31,30 @@ public class AssetHelper {
         JSON
     }
 
-    private void addCustomLoader(AssetManager assetManager) {
-        if (assetManager != null) {
-            assetManager.setLoader(LetterData.class, new LetterDataLoader(new InternalFileHandleResolver()));
-        }
 
+    public GsAssetManager() {
+        resFields = new HashMap<String, String>();
+        loadResource(Res.class);
+    }
+
+    public String getFieldValue(String fieldName) {
+        return resFields.get(fieldName);
+    }
+
+    private void addCustomLoader() {
+        setLoader(LetterData.class, new LetterDataLoader(new InternalFileHandleResolver()));
     }
 
     /**
      * 反射 cls 常量字段；获取字段名与值；
      * 进行 assetManager 资源加载；避免过多的书写 load 代码
      */
-    public void loadResource(Class<Res> cls, AssetManager assetManager,
-        HashMap<String, String> resFields) {
+    private void loadResource(Class<Res> cls) {
         try {
             // 增加自定义 加载器
-            addCustomLoader(assetManager);
+            addCustomLoader();
 
-            if (cls != null && assetManager != null) {
+            if (cls != null) {
                 //将参数类转换为对应属性数量的Field类型数组（即该类有多少个属性字段 N 转换后的数组长度即为 N）
                 Field[] fields = cls.getDeclaredFields();
                 for (int i = 0; i < fields.length; i++) {
@@ -50,16 +62,16 @@ public class AssetHelper {
                     f.setAccessible(true);
                     if ("String".equals(f.getType().getSimpleName())) {
                         if (Logc.allowPrint()) {
-                            Logc.d("[AssetHelper]  属性名：" + f.getName()
-                                + "；属性值：" + f.get(cls)
-                                + "；字段类型：" + f.getType().getSimpleName());
+                            Logc.d("[GsAssetManager]  属性名：" + f.getName()
+                                    + "；属性值：" + f.get(cls)
+                                    + "；字段类型：" + f.getType().getSimpleName());
                         }
                         // 自定义规则，只收 String 类型
                         if (f.get(cls) instanceof String) {
                             String fieldName = f.getName();
                             String fieldValue = (String) f.get(cls);
                             resFields.put(fieldName, fieldValue);
-                            loadAction(fieldValue, assetManager);
+                            loadAction(fieldValue);
                         }
                     }
 
@@ -70,22 +82,22 @@ public class AssetHelper {
         }
     }
 
-    private void loadAction(String fieldVal, AssetManager assetManager) {
+    private void loadAction(String fieldVal) {
         switch (typeAs(fieldVal)) {
             case FNT:
-                assetManager.load(fieldVal, BitmapFont.class);
+                load(fieldVal, BitmapFont.class);
                 break;
             case MP3:
-                assetManager.load(fieldVal, Music.class);
+                load(fieldVal, Music.class);
                 break;
             case PNG:
-                assetManager.load(fieldVal, Texture.class);
+                load(fieldVal, Texture.class);
                 break;
             case ATLAS:
-                assetManager.load(fieldVal, TextureAtlas.class);
+                load(fieldVal, TextureAtlas.class);
                 break;
             case JSON:
-                assetManager.load(fieldVal, LetterData.class);
+                load(fieldVal, LetterData.class);
                 break;
             default:
                 // nothing
@@ -112,4 +124,6 @@ public class AssetHelper {
         }
         return Type.NULL;
     }
+
+
 }

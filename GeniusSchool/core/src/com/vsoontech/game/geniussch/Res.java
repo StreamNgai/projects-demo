@@ -154,4 +154,8 @@ public class Res {
     public static final String LETTER_FILL_X_PNG = "letter/fill/x.png";
     public static final String LETTER_FILL_Y_PNG = "letter/fill/y.png";
     public static final String LETTER_FILL_Z_PNG = "letter/fill/z.png";
+
+    // common
+    public static final String COMMON_NEXT_PNG = "common/next.png";
+
 }

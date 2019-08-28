@@ -14,6 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.vsoontech.game.geniussch.GeniusSchool;
 import com.vsoontech.game.geniussch.Res;
@@ -21,6 +22,7 @@ import com.vsoontech.game.geniussch.data.LetterData;
 import com.vsoontech.game.geniussch.helper.LetterHelper;
 import com.vsoontech.game.geniussch.screen.actor.LetterBlankActor;
 import com.vsoontech.game.geniussch.screen.actor.LetterFillActor;
+
 import java.util.Arrays;
 import java.util.Random;
 
@@ -40,7 +42,7 @@ public class LetterScreen extends GsScreen {
         mLetterHelper = new LetterHelper((LetterData) mGame.assetManager.get(Res.LETTER_DATA_JSON));
         if (allowLog()) {
             doLog("LetterScreen create ! GDX width = " + Gdx.graphics.getWidth()
-                + " ; height = " + Gdx.graphics.getHeight());
+                    + " ; height = " + Gdx.graphics.getHeight());
         }
     }
 
@@ -75,7 +77,7 @@ public class LetterScreen extends GsScreen {
     }
 
     private void createLetterActors(char[] letters, String[] blankFields, String[] fillFields, String[] dAtlasFields,
-        String[] aTouchFields, String[] aCorrectFields) {
+                                    String[] aTouchFields, String[] aCorrectFields) {
         if (blankFields != null && blankFields.length > 0) {
             int index = -1;
             int letterLength = 0;
@@ -86,29 +88,29 @@ public class LetterScreen extends GsScreen {
             for (int i = 0; i < length; i++) {
                 index++;
                 // BlankLetterActor
-                Texture tBlank = mGame.assetManager.get(mGame.resFields.get(blankFields[i]));
+                Texture tBlank = mGame.assetManager.get(mGame.assetManager.getFieldValue(blankFields[i]));
                 TextureRegion tBkRegion = new TextureRegion(tBlank, tBlank.getWidth(), tBlank.getHeight());
                 LetterBlankActor tBlActor = new LetterBlankActor(tBkRegion, 2);
                 tBlActor.setTouchable(Touchable.disabled);
                 tBlActor.setLetter(letters[i]);
                 // 音效
-                Music tBkMusic = mGame.assetManager.get(mGame.resFields.get(aCorrectFields[i]));
+                Music tBkMusic = mGame.assetManager.get(mGame.assetManager.getFieldValue(aCorrectFields[i]));
                 tBlActor.setAudio(tBkMusic);
                 mBlankActors[index] = tBlActor;
 
                 // FillActor
-                Texture tFill = mGame.assetManager.get(mGame.resFields.get(fillFields[i]));
+                Texture tFill = mGame.assetManager.get(mGame.assetManager.getFieldValue(fillFields[i]));
                 TextureRegion tFlRegion = new TextureRegion(tFill, tFill.getWidth(), tFill.getHeight());
                 LetterFillActor tFlActor = new LetterFillActor(tFlRegion, 2);
-                TextureAtlas tFillAtlas = mGame.assetManager.get(mGame.resFields.get(dAtlasFields[i]));
+                TextureAtlas tFillAtlas = mGame.assetManager.get(mGame.assetManager.getFieldValue(dAtlasFields[i]));
                 // 动画
                 Animation<TextureRegion> runningAnimation =
-                    new Animation<TextureRegion>(0.033f, tFillAtlas.findRegions(String.valueOf(letters[i])),
-                        PlayMode.LOOP);
+                        new Animation<TextureRegion>(0.033f, tFillAtlas.findRegions(String.valueOf(letters[i])),
+                                PlayMode.LOOP);
                 tFlActor.setAnimation(runningAnimation);
                 tFlActor.setLetter(letters[i]);
                 // 音效
-                Music tFLMusic = mGame.assetManager.get(mGame.resFields.get(aTouchFields[i]));
+                Music tFLMusic = mGame.assetManager.get(mGame.assetManager.getFieldValue(aTouchFields[i]));
                 tFlActor.setAudio(tFLMusic);
                 tFlActor.setTouchable(Touchable.enabled);
                 mFillActors[index] = tFlActor;
@@ -151,9 +153,16 @@ public class LetterScreen extends GsScreen {
 
     private void removePrevLetterActors() {
         if (mBlankActors != null
-            && mBlankActors.length > 0
-            && mStage != null) {
+                && mBlankActors.length > 0
+                && mStage != null) {
             for (Actor actor : mBlankActors) {
+                mStage.getRoot().removeActor(actor);
+            }
+        }
+        if (mFillActors != null
+                && mFillActors.length > 0
+                && mStage != null) {
+            for (Actor actor : mFillActors) {
                 mStage.getRoot().removeActor(actor);
             }
         }
@@ -164,16 +173,26 @@ public class LetterScreen extends GsScreen {
     protected void newResize(int width, int height) {
         if (allowLog()) {
             doLog("LetterScreen newResize ! GDX width = " + Gdx.graphics.getWidth()
-                + " ; height = " + Gdx.graphics.getHeight());
+                    + " ; height = " + Gdx.graphics.getHeight());
         }
         mStage = new Stage(new StretchViewport(width, height));
         Gdx.input.setInputProcessor(mStage);
         // 背景
         Texture backgroundTexture = mGame.assetManager.get(Res.LETTER_BACKGROUND_PNG);
-        Image bgImg = new Image(new TextureRegion(
-            backgroundTexture,
-            backgroundTexture.getWidth(), backgroundTexture.getHeight()));
+        Image bgImg = new Image(new TextureRegion(backgroundTexture,
+                backgroundTexture.getWidth(), backgroundTexture.getHeight()));
         mStage.addActor(bgImg);
+        // next word
+        Texture nextTexture = mGame.assetManager.get(Res.COMMON_NEXT_PNG);
+        Image nextImg = new Image(new TextureRegion(nextTexture, nextTexture.getWidth(), nextTexture.getHeight()));
+        mStage.addActor(nextImg);
+        nextImg.setPosition(mWidth - nextImg.getWidth() - 30, 30);
+        nextImg.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                nextWord();
+            }
+        });
         nextWord();
         autoDisposable(mStage);
     }
@@ -232,7 +251,7 @@ public class LetterScreen extends GsScreen {
 
     private void checkAllCorrect() {
         for (LetterBlankActor bkActor : mBlankActors) {
-            if(bkActor.nonAdsorb()){
+            if (bkActor.nonAdsorb()) {
                 return;
             }
         }
@@ -242,16 +261,16 @@ public class LetterScreen extends GsScreen {
     private LetterBlankActor checkMoveCorrect(LetterFillActor fillActor) {
         for (LetterBlankActor bkActor : mBlankActors) {
             if (bkActor.getLetter() == fillActor.getLetter()
-                && bkActor.nonAdsorb()) {
+                    && bkActor.nonAdsorb()) {
                 Rectangle bkRt = new Rectangle();
                 bkRt.set(bkActor.getX(), bkActor.getY(),
-                    bkActor.getWidth(), bkActor.getHeight());
+                        bkActor.getWidth(), bkActor.getHeight());
                 Rectangle flRt = new Rectangle();
                 flRt.set(fillActor.getX(), fillActor.getY(),
-                    fillActor.getWidth(), fillActor.getHeight());
+                        fillActor.getWidth(), fillActor.getHeight());
                 if (bkRt.overlaps(flRt)) {
                     bkActor.setAdsorb();
-                    bkActor.setZIndex(1);
+                    fillActor.setZIndex(mBlankActors.length);
                     fillActor.removeListener(mInputListener);
                     return bkActor;
                 }
