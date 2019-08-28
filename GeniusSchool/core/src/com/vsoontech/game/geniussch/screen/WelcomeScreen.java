@@ -13,7 +13,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.vsoontech.game.geniussch.GeniusSchool;
+import com.vsoontech.game.geniussch.Logc;
 import com.vsoontech.game.geniussch.Res;
+import com.vsoontech.game.geniussch.data.LetterData;
 import com.vsoontech.game.geniussch.screen.actor.LoadActor;
 import com.vsoontech.game.geniussch.screen.actor.LogoActor;
 
@@ -38,13 +40,16 @@ public class WelcomeScreen extends GsScreen {
 
     public WelcomeScreen(GeniusSchool game) {
         this.mGame = game;
+        if (allowLog()) {
+            doLog("WelcomeScreen create ! GDX width = " + Gdx.graphics.getWidth()
+                + " ; height = " + Gdx.graphics.getHeight());
+        }
     }
 
     @Override
-    public void resize(int width, int height) {
-        super.resize(width, height);
+    protected void newResize(int width, int height) {
         if (allowLog()) {
-            doLog("WelcomeScreen resize !");
+            doLog("WelcomeScreen newResize !");
         }
         mStage = new Stage(new StretchViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
         mBitmapFont = new BitmapFont(Res.filesInternal(Res.FONT_REGULAR_FNT));
@@ -147,15 +152,6 @@ public class WelcomeScreen extends GsScreen {
 
     }
 
-    @Override
-    public void pause() {
-
-    }
-
-    @Override
-    public void resume() {
-
-    }
 
     @Override
     public void hide() {

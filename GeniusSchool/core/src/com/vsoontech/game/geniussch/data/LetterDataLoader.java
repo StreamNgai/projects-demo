@@ -10,44 +10,44 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
 import com.vsoontech.game.geniussch.Logc;
 
-public class WordsLoader extends AsynchronousAssetLoader<Words, WordsLoader.WordsParameter> {
+public class LetterDataLoader extends AsynchronousAssetLoader<LetterData, LetterDataLoader.LetterDataParameter> {
 
-    private Words mWords;
+    private LetterData mData;
 
-    public WordsLoader(InternalFileHandleResolver resolver) {
+    public LetterDataLoader(InternalFileHandleResolver resolver) {
         super(resolver);
         if (Logc.allowPrint()) {
-            Logc.d(" WordsLoader ");
+            Logc.d(" LetterDataLoader ");
         }
     }
 
     @Override
     public Array<AssetDescriptor> getDependencies(String fileName, FileHandle file,
-        WordsLoader.WordsParameter parameter) {
+        LetterDataLoader.LetterDataParameter parameter) {
         return null;
     }
 
     @Override
     public void loadAsync(AssetManager manager, String fileName, FileHandle file,
-        WordsLoader.WordsParameter parameter) {
-        mWords = new Json().fromJson(Words.class, file);
+        LetterDataLoader.LetterDataParameter parameter) {
+        mData = new Json().fromJson(LetterData.class, file);
 
         if (Logc.allowPrint()) {
-            Logc.d(" WordsLoader " + mWords.toString());
+            Logc.d(" LetterDataLoader " + mData.toString());
         }
     }
 
     @Override
-    public Words loadSync(AssetManager manager, String fileName, FileHandle file,
-        WordsLoader.WordsParameter parameter) {
-        Words words = this.mWords;
-        this.mWords = null;
-        return words;
+    public LetterData loadSync(AssetManager manager, String fileName, FileHandle file,
+        LetterDataLoader.LetterDataParameter parameter) {
+        LetterData LetterData = this.mData;
+        this.mData = null;
+        return LetterData;
     }
 
-    public static class WordsParameter extends AssetLoaderParameters<Words> {
+    public static class LetterDataParameter extends AssetLoaderParameters<LetterData> {
 
-        public WordsParameter() {
+        public LetterDataParameter() {
         }
     }
 

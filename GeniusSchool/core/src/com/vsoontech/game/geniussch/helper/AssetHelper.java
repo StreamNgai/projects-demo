@@ -8,9 +8,10 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.vsoontech.game.geniussch.Logc;
 import com.vsoontech.game.geniussch.Res;
-import com.vsoontech.game.geniussch.data.Words;
-import com.vsoontech.game.geniussch.data.WordsLoader;
+import com.vsoontech.game.geniussch.data.LetterData;
+import com.vsoontech.game.geniussch.data.LetterDataLoader;
 import java.lang.reflect.Field;
+import java.util.HashMap;
 
 public class AssetHelper {
 
@@ -20,15 +21,27 @@ public class AssetHelper {
         PNG,
         FNT,
         ATLAS,
-        NULL
+        NULL,
+        JSON
+    }
+
+    private void addCustomLoader(AssetManager assetManager) {
+        if (assetManager != null) {
+            assetManager.setLoader(LetterData.class, new LetterDataLoader(new InternalFileHandleResolver()));
+        }
+
     }
 
     /**
      * 反射 cls 常量字段；获取字段名与值；
      * 进行 assetManager 资源加载；避免过多的书写 load 代码
      */
-    public void loadResource(Class<Res> cls, AssetManager assetManager) {
+    public void loadResource(Class<Res> cls, AssetManager assetManager,
+        HashMap<String, String> resFields) {
         try {
+            // 增加自定义 加载器
+            addCustomLoader(assetManager);
+
             if (cls != null && assetManager != null) {
                 //将参数类转换为对应属性数量的Field类型数组（即该类有多少个属性字段 N 转换后的数组长度即为 N）
                 Field[] fields = cls.getDeclaredFields();
@@ -39,16 +52,18 @@ public class AssetHelper {
                         if (Logc.allowPrint()) {
                             Logc.d("[AssetHelper]  属性名：" + f.getName()
                                 + "；属性值：" + f.get(cls)
-                                + ";字段类型：" + f.getType().getSimpleName());
+                                + "；字段类型：" + f.getType().getSimpleName());
                         }
-                        loadAction((String) f.get(cls), assetManager);
+                        // 自定义规则，只收 String 类型
+                        if (f.get(cls) instanceof String) {
+                            String fieldName = f.getName();
+                            String fieldValue = (String) f.get(cls);
+                            resFields.put(fieldName, fieldValue);
+                            loadAction(fieldValue, assetManager);
+                        }
                     }
 
                 }
-
-
-                assetManager.setLoader(Words.class, new WordsLoader(new InternalFileHandleResolver()));
-                assetManager.load("assets/letter/words.json", Words.class);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -69,6 +84,9 @@ public class AssetHelper {
             case ATLAS:
                 assetManager.load(fieldVal, TextureAtlas.class);
                 break;
+            case JSON:
+                assetManager.load(fieldVal, LetterData.class);
+                break;
             default:
                 // nothing
                 break;
@@ -88,6 +106,8 @@ public class AssetHelper {
                 return Type.FNT;
             } else if (".mp3".equals(suffix)) {
                 return Type.MP3;
+            } else if (".json".equals(suffix)) {
+                return Type.JSON;
             }
         }
         return Type.NULL;

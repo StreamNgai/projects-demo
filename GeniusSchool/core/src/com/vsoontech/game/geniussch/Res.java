@@ -19,6 +19,7 @@ public class Res {
 
     // 字母游戏背景
     public static final String LETTER_BACKGROUND_PNG = "letter/background.png";
+    public static final String LETTER_DATA_JSON = "letter/data.json";
     // 字母动画
     public static final String LETTER_DYNAMIC_A_ATLAS = "letter/dynamic/a/a.atlas";
     public static final String LETTER_DYNAMIC_B_ATLAS = "letter/dynamic/b/b.atlas";

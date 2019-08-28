@@ -12,6 +12,7 @@ import java.util.ArrayList;
  */
 abstract class GsScreen implements Screen {
 
+    int mWidth, mHeight;
     private ArrayList<Disposable> mDisposableList;
 
     boolean allowLog() {
@@ -27,7 +28,21 @@ abstract class GsScreen implements Screen {
         if (mDisposableList == null) {
             mDisposableList = new ArrayList<Disposable>();
         }
-        dispose();
+        if (checkResize(width, height)) {
+            dispose();
+            newResize(width, height);
+        }
+    }
+
+    protected abstract void newResize(int width, int height);
+
+    private boolean checkResize(int w, int h) {
+        if (mWidth != w || mHeight != h) {
+            mWidth = w;
+            mHeight = h;
+            return true;
+        }
+        return false;
     }
 
     // 辅助 dispose ;
@@ -57,5 +72,25 @@ abstract class GsScreen implements Screen {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void show() {
+
+    }
+
+    @Override
+    public void pause() {
+
+    }
+
+    @Override
+    public void resume() {
+
+    }
+
+    @Override
+    public void hide() {
+
     }
 }

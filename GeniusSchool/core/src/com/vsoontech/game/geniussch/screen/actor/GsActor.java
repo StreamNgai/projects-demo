@@ -1,6 +1,7 @@
 package com.vsoontech.game.geniussch.screen.actor;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.ui.Widget;
 import com.vsoontech.game.geniussch.Logc;
 
 /**
@@ -8,7 +9,7 @@ import com.vsoontech.game.geniussch.Logc;
  *
  * @author Ngai
  */
-class GsActor extends Actor {
+class GsActor extends Widget {
 
     boolean allowLog() {
         return Logc.allowPrint();

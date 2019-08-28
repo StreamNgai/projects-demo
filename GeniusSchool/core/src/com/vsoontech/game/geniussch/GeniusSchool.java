@@ -6,15 +6,18 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.vsoontech.game.geniussch.data.Words;
-import com.vsoontech.game.geniussch.data.WordsLoader;
+import com.vsoontech.game.geniussch.data.LetterData;
+import com.vsoontech.game.geniussch.data.LetterDataLoader;
+import com.vsoontech.game.geniussch.helper.AssetHelper;
 import com.vsoontech.game.geniussch.screen.WelcomeScreen;
+import java.util.HashMap;
 
 public class GeniusSchool extends Game {
 
     // used by all screens
     public SpriteBatch spriteBatch;
     public AssetManager assetManager;
+    public HashMap<String, String> resFields;
 
     @Override
     public void create() {
@@ -23,9 +26,8 @@ public class GeniusSchool extends Game {
         }
         spriteBatch = new SpriteBatch();
         assetManager = new AssetManager();
-        assetManager.setLoader(Words.class, new WordsLoader(new InternalFileHandleResolver()));
-        assetManager.load("letter/words.json", Words.class);
-//        new AssetHelper().loadResource(Res.class, assetManager);
+        resFields = new HashMap<String, String>();
+        new AssetHelper().loadResource(Res.class, assetManager, resFields);
 
         setScreen(new WelcomeScreen(this));
     }
