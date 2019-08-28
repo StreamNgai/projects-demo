@@ -1,5 +1,6 @@
 package com.vsoontech.game.geniussch.screen.actor;
 
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
@@ -11,6 +12,9 @@ public class LetterBlankActor extends GsActor {
 
 
     private TextureRegion mRegion;
+    private char mLetter;
+    private boolean hasAdsorb;// 是否已经配对
+    private Music mMusic;
 
     public LetterBlankActor(TextureRegion region, float alphaDuration) {
         this.mRegion = region;
@@ -39,4 +43,26 @@ public class LetterBlankActor extends GsActor {
     }
 
 
+    public void setLetter(char letter) {
+        this.mLetter = letter;
+    }
+
+    public char getLetter() {
+        return mLetter;
+    }
+
+    public boolean nonAdsorb() {
+        return !hasAdsorb;
+    }
+
+    public void setAdsorb() {
+        hasAdsorb = true;
+        if (mMusic != null) {
+            mMusic.play();
+        }
+    }
+
+    public void setAudio(Music music) {
+        this.mMusic = music;
+    }
 }

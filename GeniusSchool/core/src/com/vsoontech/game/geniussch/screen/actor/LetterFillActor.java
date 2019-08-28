@@ -17,6 +17,8 @@ public class LetterFillActor extends GsActor {
     private Music mMusic;
     private TextureRegion mRegion;
     private float stateTime;
+    private int originX, originY;
+    private char mLetter;
 
     public LetterFillActor(TextureRegion region, float alphaDuration) {
         this.mRegion = region;
@@ -72,5 +74,27 @@ public class LetterFillActor extends GsActor {
         if (mMusic != null) {
             mMusic.stop();
         }
+    }
+
+    public void markOriginXY(int x, int y) {
+        this.originX = x;
+        this.originY = y;
+    }
+
+    public void moveOriginXY() {
+        moveXY(originX, originY);
+    }
+
+    public void setLetter(char letter) {
+        this.mLetter = letter;
+    }
+
+    public char getLetter() {
+        return mLetter;
+    }
+
+    public void moveXY(float x, float y) {
+        clearActions();
+        addAction(Actions.moveTo(x, y, 0.6f));
     }
 }
