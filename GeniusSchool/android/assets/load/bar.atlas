@@ -1,0 +1,21 @@
+
+bar.png
+size: 1024,128
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+background
+  rotate: false
+  xy: 2, 48
+  size: 606, 46
+  orig: 606, 46
+  offset: 0, 0
+  index: -1
+progress_draw
+  rotate: false
+  xy: 2, 2
+  size: 604, 44
+  split: 18, 18, 5, 5
+  orig: 604, 44
+  offset: 0, 0
+  index: -1
