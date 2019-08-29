@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<style type="text/css">
+			div { margin-bottom: 2em; }
+			p, li { font-size: 12px; padding-bottom: 1px; padding-top: 1px; }
+			ul { padding-left: 1em; margin: 0; }
+			h1 { border-bottom: 1px solid; font-size: 18px; }
+			h2 { font-size: 12px; margin-bottom: 5px; }
+		</style>
+	</head>
+	<body>
+		<div>
+			<h1>1.0.2 <em>(2010-10-16)</em></h1>
+			<h2>Bug Fixes:</h2>
+			<ul>
+				<li>Attempt to recover from <code>OutOfMemoryError</code>s when loading the background bitmap.</li>
+				<li>Properly calculate valid possible fruit positions to appear at any row/column intersection.</li>
+				<li>Ensure preferences can be properly accessed when the wallpaper engine has not fully started.</li>
+			</ul>
+		</div>
+		
+		<div>
+			<h1>1.0.1 <em>(2010-10-15)</em></h1>
+			<h2>Bug Fixes:</h2>
+			<ul>
+				<li>Revert a force close catcher since it can cause an infinite game restart loop leading to a force close itself. Remember, please click "Report" on any force closes if you are on Android 2.2 or newer.</li>
+			</ul>
+		</div>
+		
+		<div>
+			<h1>1.0.0 <em>(2010-10-13)</em></h1>
+			<h2>Bug Fixes:</h2>
+			<ul>
+				<li>Fail gracefully when background image is no longer available.</li>
+				<li>Restart automatically when a fatal runtime error occurs so we never go permanently black.</li>
+			</ul>
+		</div>
+		
+		<div>
+			<h1>1.0.0 RC6 <em>(2010-10-04)</em></h1>
+			<h2>New Features:</h2>
+			<ul>
+				<li>New RGB color picker which allows for any color to be easily selected.</li>
+				<li>Specify widget locations to customize the grid layout to not go behind your widgets. See "Widget Locations" under "Display" settings.</li>
+				<li>Opacity can now be set on background images.</li>
+				<li>Initial top and bottom padding is based off of device independent pixels (DIPs). This should allow the grid to be properly aligned out-of-the-box 99% of the time.</li>
+				<li>HUD size is now a user-configurable option and will default to an appropriate size for the display.</li>
+				<li>Board will rotate and resize with device orientation.</li>
+			</ul>
+			<h2>Bug Fixes:</h2>
+			<ul>
+				<li>Color and number preferences now only save when you click "OK" rather than when the value was changed.</li>
+				<li>Delete stored preferences when resetting rather than overwriting with defaults.</li>
+			</ul>
+		</div>
+		
+		<div>
+			<h1>1.0.0 RC5 <em>(2010-08-12)</em></h1>
+			<h2>New Features:</h2>
+			<ul>
+				<li>Six new trophies! See the "Trophies" screen for details.</li>
+			</ul>
+			<h2>Bug Fixes:</h2>
+			<ul>
+				<li>Fix the 1.0x10^100 trophy to trigger regardless of whether or not a life has been lost.</li>
+			</ul>
+		</div>
+		
+		<div>
+			<h1>1.0.0 RC4 <em>(2010-08-09)</em></h1>
+			<h2>New Features:</h2>
+			<ul>
+				<li><strong>Trophies</strong>! There are four trophies which unlock special variations on the game. Check out the "Trophies" screen to see the achievements required to unlock each.</em></li>
+			</ul>
+			<h2>Bug Fixes:</h2>
+			<ul>
+				<li>Corrected off-by-one error which occurs when the ghosts were in "Chase and Scatter" mode and entering their final chase pattern on level 20.</li>
+				<li>Actually display the kill screen garbled sprites when reached the level is reached.</li>
+			</ul>
+		</div>
+		
+		<div>
+			<h1>1.0.0 RC3 <em>(2010-08-06)</em></h1>
+			<h2>New Features:</h2>
+			<ul>
+				<li>Edge wrapping for entities. Optionally allow The Man and/or ghosts to wrap around all edges or just the middle row.</li>
+				<li>New "Around The Web" section of "About" containing links to official web sites related to Wakka Wallpaper.</li>
+			</ul>
+			<h2>Bug Fixes:</h2>
+			<ul>
+				<li>Draw the entirety of the ghost body path as we can't rely on it automatically linking the final two segments when the entities style is stroke.</li>
+				<li>When the entity style is set to stroke ensure the warning blink when frightened is also drawn in that style.</li>
+				<li>The lives of The Man should be drawn in the same style as the player entity.</li>
+				<li>Always paint the background color every frame regardless of whether an image has been set or not. This ensures that the screen will be cleared when you are using background images with transparency.</li>
+			</ul>
+		</div>
+		
+		<div>
+			<h1>1.0.0 RC2 <em>(2010-08-04)</em></h1>
+			<h2>New Features:</h2>
+			<ul>
+				<li>Increased row and column maximum to 8 to match ADW.Launcher maximums.</li>
+				<li>Add ability to draw walls around icons to match the iOS static wallpaper (<em>thanks <a href="http://forum.xda-developers.com/showthread.php?t=741957#post7482447">chazam</a>!</em>). Due to the slight but deliberate misalignment of the grid by default as a tradeoff between edge visibility and icon alignment, the walls will not perfectly surround your icons. You can adjust the "Grid Padding" settings under "Display" to tweak the alignment to your liking.</li>   
+			</ul>
+			<h2>Bug Fixes:</h2>
+			<ul>
+				<li>Importing of old or partial JSONs will no longer cause a force close.</li>
+			</ul>
+		</div>
+		
+		<div>
+			<h1>1.0.0 RC1 <em>(2010-07-31)</em></h1>
+			<p>First public release candidate. No new features.</p>
+		</div>
+		
+		<div>
+			<h1>1.0.0 beta 5 <em>(2010-07-30)</em></h1>
+			<h2>New Features:</h2>
+			<ul>
+				<li>Endless juggerdot regeneration threshold can be adjusted.</li>
+				<li>Sprites for fruit finally added in all their pixelated glory.</li>
+				<li>Support for background images added. All images will be scaled to screen dimensions and will be center cropped (if needed).</li>
+				<li>Added movement modes for The Man. He can use the nearest dot or random turns as a method to determine his next movement. (<small><em>An intelligent AI has been pushed to a future release. Help out <a href="http://github.com/JakeWharton/WakkaWallpaper">here</a>.</em></small>)</li>
+				<li>The drawing style of the entities (TheMan, Ghosts) and the dots can be toggled between fill (solid shapes) or stroke (outlines).</li>
+				<li>The default mode of ghosts, chase and scatter, is now fully functional.</li>
+				<li>Ghost frightened length now varies depending on what level you are on. While the length will be the same as the original game, the time flashing is constant and will always be the last second of the frightened state.</li>
+			</ul>
+		</div>
+		
+		<div>
+			<h1>1.0.0 beta 4 <em>(2010-07-28)</em></h1>
+			<h2>New Features:</h2>
+			<ul>
+				<li>Game modes: Arcade for traditional gameplay or Endless where the dots keep regenerating.</li>
+				<li>Instructions and change log added to about screen.</li>
+				<li>HUD offset from bottom of screen is now adjustable via settings. This should allow for users of HTC Sense to see the HUD.</li>
+				<li>Preference to toggle whether touches affect The Man's direction.</li>
+				<li>Juggerdot color can be changed independently of the normal dots.</li>
+				<li>Juggerdots now blink. Rate can be adjusted via the settings.</li>
+				<li>Import JSON, export JSON, and a new reset all option are now located in the menu of the settings.</li>
+				<li>Allow selection of any file when importing settings.</li>
+				<li>Ghost moving logic mode can now be changed in the settings.</li>
+			</ul>
+			<h2>Bug Fixes:</h2>
+			<ul>
+				<li>Determine proper user direction when in landscape mode.</li>
+				<li>Changing padding without a game reset is now properly calculated.</li>
+			</ul>
+		</div>
+		
+		<div>
+			<h1>1.0.0 beta 3 <em>(2010-07-25)</em></h1>
+			<h2>New Features:</h2>
+			<ul>
+				<li>Tapping the top, bottom, left, or right of your screen will influence The Man's direction. If you tap a direction, he will attempt to change to that direction every time he moves until he hits a wall. If he successfully changes direction he will continue going that direction until he hits a wall. If he hit a wall while going the current direction and was unable to change to your desired direction the AI will choose a new direction and your desired direction will be cleared. This does not yet work in landscape. The directions are calculated based off of the center of your screen and not The Man's location. Even though you may be tapping to The Man's left, if it is to the right of the screen center he will go right.</li>
+			</ul>
+			<h2>Bug Fixes:</h2>
+			<ul>
+				<li>Ghosts, The Man, Fruit, and "Ready"/"Game Over" text now rotate when in landscape.</li>
+			</ul>
+		</div>
+		
+		<div>
+			<h1>1.0.0 beta 2 <em>(2010-07-24)</em></h1>
+			<h2>New Features:</h2>
+			<ul>
+				<li>Fruit now appears as a pinkish circle at random intersections.</li>
+				<li>About screen in settings to list instructions and general info (eventually)</li>
+				<li>Current level added next to score</li>
+				<li>Number of ghosts can now be any number between zero and four.</li>
+			</ul>
+			<h2>Bug Fixes:</h2>
+			<ul>
+				<li>Level completion bug resolved</li>
+				<li>Preferences are no longer translucent to make reading easier</li>
+			</ul>
+		</div>
+		
+		<div>
+			<h1>1.0.0 beta 1 <em>(2010-07-23)</em></h1>
+			<p>Total rewrite of codebase.</p>
+			<h2>New Features:</h2>
+			<ul>
+				<li>The Man's mouth is now animated as he moves.</li>
+				<li>Landscape support.</li>
+				<li>Antialiased drawing enabled.</li>
+				<li>AI for seeking out closest dot.</li>
+				<li>Ghosts now drawn properly.</li>
+				<li>HUD displaying score and lives.</li>
+				<li>Double-tap within 0.1s to reset game.</li>
+				<li>Settings activity to change all of the preferences.</li>
+				<li>Preferences JSON import and export to SD card.</li>
+			</ul>
+		</div>
+		
+		<div>
+			<h1>1.0.0 alpha 1 <em>(2010-07-08)</em></h1>
+			<p>Initial proof-of-concept release.</p>
+		</div>
+	</body>
+</html>
