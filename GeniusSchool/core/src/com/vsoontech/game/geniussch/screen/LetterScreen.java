@@ -203,14 +203,16 @@ public class LetterScreen extends GsScreen {
             }
         });
         // timer actor
-        mBitmapFont = new BitmapFont(Res.filesInternal(Res.FONT_REGULAR_FNT));
+        mBitmapFont = new BitmapFont(Res.filesInternal(Res.FONT_REGULARLARGE_FNT));
         Label.LabelStyle labelStyle = new LabelStyle();
         labelStyle.font = mBitmapFont;
-        labelStyle.fontColor = Color.BLACK;
-        CountTimerActor timerActor = new CountTimerActor(null, labelStyle);
+        labelStyle.fontColor = Color.WHITE;
+        Texture ctTexture = mGame.assetManager.get(Res.COMMON_TIMER_BG_PNG);
+        TextureRegion ctRegion = new TextureRegion(ctTexture, ctTexture.getWidth(), ctTexture.getHeight());
+        CountTimerActor timerActor = new CountTimerActor(ctRegion, labelStyle);
 
         timerActor.doAgainTime(100);
-        timerActor.setPosition(300, 300);
+        timerActor.setPosition(200, mHeight - 200);
 
         mStage.addActor(timerActor);
 

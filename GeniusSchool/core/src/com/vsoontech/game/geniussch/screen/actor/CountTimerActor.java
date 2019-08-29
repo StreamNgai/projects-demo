@@ -29,12 +29,13 @@ public class CountTimerActor extends GsActor {
     public CountTimerActor(TextureRegion region, LabelStyle labelStyle) {
         this.mRegion = region;
         this.mLabel = new Label("", labelStyle);
+        mLabel.scaleBy(2.5f);
     }
 
     @Override
     public void setPosition(float x, float y) {
         super.setPosition(x, y);
-        mLabel.setPosition(x, y);
+        mLabel.setPosition((float) (mRegion.getRegionWidth() * 0.56 + x), (float) (y + mRegion.getRegionHeight() * 0.4));
     }
 
     @Override
