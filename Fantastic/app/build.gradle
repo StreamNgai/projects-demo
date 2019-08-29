@@ -1,0 +1,119 @@
+apply plugin: 'com.android.application'
+//apply plugin: 'com.android.library'
+apply plugin: 'com.jakewharton.butterknife'
+
+def vn = "1.02.01"
+def vc = vn.replace('.', '').toInteger()
+
+def debugDemo = 'false'
+
+android {
+    compileSdkVersion 25
+    buildToolsVersion "25.0.2"
+    defaultConfig {
+        applicationId "dev.ngai.fantastic"
+        minSdkVersion 19
+        // targetSdkVersion 目标版本降低，可以绕过权限动态申请? 有验证过，貌似可行。
+        targetSdkVersion 22
+        versionCode vc
+        versionName vn
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        renderscriptSupportModeEnabled true
+//        ndk{
+//            abiFilters('armeabi','armeabi-v7a','x86')
+//        }
+
+    }
+    useLibrary 'org.apache.http.legacy'
+
+    buildTypes {
+        debug {
+            minifyEnabled false
+            shrinkResources false
+            zipAlignEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            buildConfigField("Boolean", "isDemo", debugDemo);
+        }
+
+        release {
+            minifyEnabled true//混淆打包
+            shrinkResources true//去掉不用资源
+            zipAlignEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            buildConfigField("Boolean", "isDemo", 'false');
+
+            applicationVariants.all { variant ->
+                variant.outputs.each { output ->
+                    def outputFile = output.outputFile
+                    if (outputFile != null && outputFile.name.endsWith('.apk')) {
+                        def fileName = "Fantastic_Release_v${defaultConfig.versionName}.apk"
+                        output.outputFile = new File(outputFile.parent + '/build/', fileName)
+                    }
+                }
+            }
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_7
+        targetCompatibility JavaVersion.VERSION_1_7
+    }
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ['libs']
+        }
+    }
+    lintOptions {
+        abortOnError false
+    }
+
+}
+
+// greenDao ---------------------------
+apply plugin: 'org.greenrobot.greendao'
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'org.greenrobot:greendao-gradle-plugin:3.2.1'
+    }
+}
+greendao {
+    schemaVersion 13
+    daoPackage 'dev.ngai.fantastic.data.source.local.dao'
+    targetGenDir 'src/main/java'
+}
+// -------------------------------------
+
+dependencies {
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+    //    debugCompile 'com.amitshekhar.android:debug-db:0.4.0'
+    compile project(':library')
+//    compile project(':libres')
+    compile 'com.android.support:appcompat-v7:25.3.1'
+    compile 'org.greenrobot:greendao:3.2.0'
+//    compile 'org.jsoup:jsoup:1.10.2'
+    compile 'com.android.support:support-v4:25.3.1'
+    compile 'com.android.support:recyclerview-v7:25.3.1'
+    compile 'com.google.guava:guava:18.0'
+    compile 'com.github.bumptech.glide:glide:3.7.0'
+    compile 'jp.wasabeef:glide-transformations:2.0.1'
+    compile 'com.jakewharton:butterknife:8.5.1'
+    compile 'org.greenrobot:eventbus:3.0.0'
+    compile 'com.makeramen:roundedimageview:2.3.0'
+    compile 'com.airbnb.android:lottie:2.1.0'
+    compile 'com.android.support:design:25.3.1'
+    compile 'com.afollestad.material-dialogs:core:0.9.4.5'
+    compile 'com.umeng.analytics:analytics:latest.integration'
+    testCompile 'junit:junit:4.12'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:8.5.1'
+    compile 'q.rorbin:badgeview:1.1.2'
+//    compile 'com.google.code.gson:gson:2.8.0'
+//    compile 'cn.bmob.android:http-legacy:1.0'
+//    compile 'cn.bmob.android:bmob-sdk:3.4.7-aar'
+    //bmob-sdk
+    compile 'cn.bmob.android:bmob-sdk:3.5.7'
+}

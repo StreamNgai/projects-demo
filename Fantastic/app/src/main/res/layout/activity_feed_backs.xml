@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:context="dev.ngai.fantastic.business.feedback.FeedBacksActivity">
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/app_bar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/app_bar_height"
+        android:fitsSystemWindows="true"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <android.support.design.widget.CollapsingToolbarLayout
+            android:id="@+id/toolbar_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fitsSystemWindows="true"
+            app:contentScrim="?attr/colorPrimary"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed">
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:layout_collapseMode="pin"
+                app:contentInsetStartWithNavigation="0dp"
+                app:titleTextAppearance="@style/Toolbar.TitleText"
+                app:popupTheme="@style/AppTheme.PopupOverlay" />
+
+        </android.support.design.widget.CollapsingToolbarLayout>
+    </android.support.design.widget.AppBarLayout>
+
+    <include
+        android:id="@+id/contentPanel"
+        layout="@layout/content_feed_backs" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/fab_margin"
+        app:layout_anchor="@id/app_bar"
+        app:layout_anchorGravity="bottom|end"
+        app:srcCompat="@drawable/ic_addone" />
+
+    <LinearLayout
+        android:id="@+id/feedBackInputLayout"
+        android:layout_width="match_parent"
+        android:paddingLeft="8dp"
+        android:visibility="gone"
+        android:paddingRight="8dp"
+        app:layout_anchor="@id/contentPanel"
+        app:layout_anchorGravity="bottom|center_horizontal"
+        android:background="#FFFFFF"
+        android:paddingTop="6dp"
+        android:orientation="horizontal"
+        android:paddingBottom="6dp"
+        android:layout_height="wrap_content">
+
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_gravity="center_vertical"
+            android:gravity="center_vertical"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:id="@+id/contentEdit"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="反馈内容(80)"
+                android:inputType="textMultiLine"
+                android:maxLength="68"
+                android:maxLines="3"/>
+
+        </android.support.design.widget.TextInputLayout>
+
+        <Button
+            android:id="@+id/commit"
+            android:text="提 交"
+            android:gravity="center"
+            android:layout_width="65dp"
+            android:layout_gravity="center_vertical"
+            android:layout_height="48dp"
+            android:background="@drawable/btn_login_sel"
+            android:textColor="#ffffff"
+            android:layout_marginLeft="8dp"/>
+
+    </LinearLayout>
+
+</android.support.design.widget.CoordinatorLayout>

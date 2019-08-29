@@ -1,0 +1,7 @@
+#Internal package file, do not edit.
+#Tue Nov 06 18:38:35 CST 2018
+0.baseType=DIRECTORY
+0.base=E\:\\360MoveData\\Users\\Administrator\\Documents\\GitHub\\projects-demo\\android-Camera2Video-master\\Application\\build\\intermediates\\transforms\\dexMerger\\debug\\0
+0.path=classes.dex
+0.set=DEX
+count=1

@@ -1,0 +1,30 @@
+
+
+1、ADB 操作
+https://github.com/mzlogin/awesome-adb
+
+2、gradle 3.0
+a、打包apk时，不支持重建apk文件，但允许重命名  [tip -> applicationVariants.all]
+
+3、EventBus
+https://github.com/greenrobot/EventBus
+
+4、greenDAO
+https://github.com/greenrobot/greenDAO
+
+5、Glide
+http://bumptech.github.io/glide/
+
+6、Bmob 开发文档
+http://doc.bmob.cn/data/android/develop_doc/#_25
+
+遇到的问题解决方案
+1、从Lollipop版本开始，按钮增加了一个 StateListAnimator style，即使你在增加了按钮之后增加其他控件，这个按钮最终都会显示在最上层解决方法：
+  XML:
+  android:stateListAnimator="@null"
+  Java:
+  Button button = new Button(this);
+  button.setText("Button");
+  if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+      button.setStateListAnimator(null);
+  }

@@ -1,0 +1,22 @@
+<resources>
+    <string name="app_name">Amazing</string>
+
+    <string name="copy_right">GuangZhou Amazing Technology CO,Ltd\nCopyright@ 2015-2018</string>
+
+    <string name="acc_name">用户名</string>
+    <string name="email">邮箱</string>
+    <string name="password">输入密码</string>
+    <string name="forget_psw">忘记密码?</string>
+    <string name="user_register">新用户注册</string>
+    <string name="login">登\t陆</string>
+    <string name="next_step">下一步</string>
+    <string name="album_group">专辑分类</string>
+    <string name="choose">选择</string>
+
+    <string name="title_activity_account">AccountActivity</string>
+    <string name="app_introduction">唯色影，唯摄影\n海量美媚专辑图片，任君选看\n分享大师对艺术与生活觉悟的高质量摄影专辑</string>
+
+    <string name="action_settings">Settings</string>
+
+
+</resources>
