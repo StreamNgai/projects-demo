@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <dev.whl.openglwidget.wave.WaveView
+        android:id="@+id/waveView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerInParent="true" />
+
+    <Button
+        android:id="@+id/tapeBtn"
+        android:layout_width="80dp"
+        android:layout_height="match_parent"
+        android:layout_margin="10dp"
+        android:layout_centerInParent="true"
+        android:background="@android:color/transparent"
+        android:drawableRight="@drawable/tape"
+        android:paddingRight="17dp" />
+
+</merge>
