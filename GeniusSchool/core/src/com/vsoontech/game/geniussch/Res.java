@@ -157,5 +157,6 @@ public class Res {
 
     // common
     public static final String COMMON_NEXT_PNG = "common/next.png";
+    public static final String COMMON_TIMER_BG_PNG = "common/timer_bg.png";
 
 }

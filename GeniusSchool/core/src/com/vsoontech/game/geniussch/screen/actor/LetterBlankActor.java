@@ -65,4 +65,10 @@ public class LetterBlankActor extends GsActor {
     public void setAudio(Music music) {
         this.mMusic = music;
     }
+
+    public void disMusic() {
+        if (mMusic != null) {
+            mMusic.dispose();
+        }
+    }
 }
