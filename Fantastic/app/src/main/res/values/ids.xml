@@ -1,6 +1,0 @@
-<resources>
-    <item name="imgs" type="id"></item>
-    <item name="index" type="id"></item>
-    <item name="obj" type="id"></item>
-    <item name="obj_id" type="id"></item>
-</resources>
