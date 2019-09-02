@@ -7,6 +7,7 @@ import android.speech.tts.TextToSpeech.OnInitListener;
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
 import com.vsoontech.game.BuildConfig;
+import com.vsoontech.game.geniussch.font.ExampleMain;
 import com.vsoontech.game.geniussch.speech.SpeechInterface;
 
 import java.util.Locale;
@@ -20,6 +21,12 @@ public class AndroidLauncher extends AndroidApplication implements SpeechInterfa
         super.onCreate(savedInstanceState);
         AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
         initGsConfig();
+        initSpeech();
+        initialize(new GeniusSchool(this), config);
+//        initialize(new ExampleMain(), config);
+    }
+
+    private void initSpeech() {
         mTextToSpeech = new TextToSpeech(this, new OnInitListener() {
             @Override
             public void onInit(int status) {
@@ -32,18 +39,17 @@ public class AndroidLauncher extends AndroidApplication implements SpeechInterfa
                         Logc.d("TextToSpeech result = " + result);
                     }
                     if (result == TextToSpeech.LANG_MISSING_DATA
-                            || result == TextToSpeech.LANG_NOT_SUPPORTED) {
+                        || result == TextToSpeech.LANG_NOT_SUPPORTED) {
                         if (Logc.allowPrint()) {
                             Logc.d("TextToSpeech This Language is not supported");
                         }
                     } else {
                         mTextToSpeech.speak("Vsoontech", TextToSpeech.QUEUE_FLUSH,
-                                null);
+                            null);
                     }
                 }
             }
         });
-        initialize(new GeniusSchool(this), config);
     }
 
     private void initGsConfig() {

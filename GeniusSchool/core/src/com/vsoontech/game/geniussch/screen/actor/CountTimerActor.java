@@ -35,7 +35,8 @@ public class CountTimerActor extends GsActor {
     @Override
     public void setPosition(float x, float y) {
         super.setPosition(x, y);
-        mLabel.setPosition((float) (mRegion.getRegionWidth() * 0.56 + x), (float) (y + mRegion.getRegionHeight() * 0.4));
+        mLabel
+            .setPosition((float) (mRegion.getRegionWidth() * 0.56 + x), (float) (y + mRegion.getRegionHeight() * 0.4));
     }
 
     @Override
@@ -64,11 +65,13 @@ public class CountTimerActor extends GsActor {
             && tTime <= mSecond) {
             mCurrTime = tTime;
             int rs = mSecond - mCurrTime;
-            if (rs == 0) {
+            if (rs <= 0) {
                 mLabel.setText("时间到");
             } else {
                 mLabel.setText(String.valueOf(mSecond - mCurrTime));
             }
+        } else {
+            mLabel.setText("tTime = " + tTime);
         }
         mLabel.act(delta);
     }

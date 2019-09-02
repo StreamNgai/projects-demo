@@ -203,7 +203,8 @@ public class LetterScreen extends GsScreen {
             }
         });
         // timer actor
-        mBitmapFont = new BitmapFont(Res.filesInternal(Res.FONT_REGULARLARGE_FNT));
+        mBitmapFont = new BitmapFont(Res.filesInternal(Res.FONT_REGULAR_FNT));
+        mBitmapFont.getData().scale(1.5f);
         Label.LabelStyle labelStyle = new LabelStyle();
         labelStyle.font = mBitmapFont;
         labelStyle.fontColor = Color.WHITE;

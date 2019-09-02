@@ -13,7 +13,7 @@ public class Res {
     }
 
     public static final String FONT_REGULAR_FNT = "font/regular.fnt";
-    public static final String FONT_REGULARLARGE_FNT = "font/regular.fnt";
+    public static final String FONT_REGULARLARGE_FNT = "font/font.fnt";
     public static final String LOAD_BAR_ATLAS = "load/bar.atlas";
     public static final String WELCOME_BACKGROUND_PNG = "welcome/background.png";
     public static final String WELCOME_LOGO_PNG = "welcome/logo.png";
