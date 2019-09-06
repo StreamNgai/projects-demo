@@ -2,7 +2,7 @@ package com.whltech.netres.prettypic;
 
 import java.util.ArrayList;
 
-public class PageItem {
+public class Pageres {
 
     // 当前页 地址
     public String href;
@@ -33,12 +33,12 @@ public class PageItem {
 
     @Override
     public String toString() {
-        return "PageItem{" +
+        return "Pageres{" +
             "href='" + href + '\'' +
             ", alt='" + alt + '\'' +
             ", src='" + src + '\'' +
-            ", count=" + count +
-            ", hds=" + hds +
+            ", \ncount=" + hds.size() +
+            ", \nhds=" + hds +
             '}';
     }
 }
