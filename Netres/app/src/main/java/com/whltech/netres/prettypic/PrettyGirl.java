@@ -2,8 +2,12 @@ package com.whltech.netres.prettypic;
 
 import java.util.ArrayList;
 
-public class Pageres {
+import cn.bmob.data.bean.table.BmobObject;
 
+public class PrettyGirl extends BmobObject {
+
+    // 分类
+    public String group;
     // 当前页 地址
     public String href;
     // 对应 Pic 组标题
@@ -15,7 +19,7 @@ public class Pageres {
     // 高清图组
     public ArrayList<Hd> hds;
 
-    public static class Hd {
+    public static class Hd  extends BmobObject{
 
         // 对应 Pic 高清Href
         public String hdHref;
@@ -33,12 +37,13 @@ public class Pageres {
 
     @Override
     public String toString() {
-        return "Pageres{" +
-            "href='" + href + '\'' +
-            ", alt='" + alt + '\'' +
-            ", src='" + src + '\'' +
-            ", \ncount=" + hds.size() +
-            ", \nhds=" + hds +
-            '}';
+        return "PrettyGirl{" +
+                "group='" + group + '\'' +
+                ", href='" + href + '\'' +
+                ", alt='" + alt + '\'' +
+                ", src='" + src + '\'' +
+                ", count=" + count +
+                ", hds=" + hds +
+                '}';
     }
 }
